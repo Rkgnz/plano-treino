@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plano Semanal v2 — Objectivo Whitfield</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f5f5f0;
+    color: #2a2a28;
+    line-height: 1.5;
+    padding: 24px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  header {
+    background: #1a1a1a;
+    color: #fff;
+    padding: 32px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+  header h1 { font-size: 28px; font-weight: 500; margin-bottom: 8px; }
+  header .subtitle { color: #b8b8b0; font-size: 15px; margin-bottom: 24px; }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .summary-card {
+    background: rgba(255,255,255,0.08);
+    padding: 14px 16px;
+    border-radius: 8px;
+  }
+  .summary-card .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #b8b8b0;
+    margin-bottom: 4px;
+  }
+  .summary-card .value { font-size: 20px; font-weight: 500; }
+  .summary-card .unit { font-size: 13px; color: #b8b8b0; margin-left: 4px; }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6a6a65;
+    margin: 32px 0 12px 4px;
+  }
+
+  .day-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 1px solid #e5e5dd;
+  }
+  .day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #efefe8;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .day-name {
+    font-size: 22px;
+    font-weight: 500;
+    color: #1a1a1a;
+  }
+  .day-tag {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  .day-tag.training { background: #fde9e2; color: #993c1d; }
+  .day-tag.recovery { background: #e6f1fb; color: #185fa5; }
+
+  .day-totals {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: #6a6a65;
+  }
+  .day-totals span { display: flex; align-items: center; gap: 4px; }
+  .day-totals strong { color: #1a1a1a; font-weight: 500; }
+
+  .timeline {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0;
+  }
+  .timeline-time {
+    font-size: 13px;
+    color: #6a6a65;
+    padding: 14px 12px 14px 0;
+    border-right: 2px solid #efefe8;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+  .timeline-content {
+    padding: 14px 0 14px 20px;
+    position: relative;
+  }
+  .timeline-content::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 18px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #d8d8d0;
+  }
+
+  .block { padding: 12px 14px; border-radius: 8px; }
+  .block-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: #1a1a1a;
+  }
+  .block-detail { font-size: 13px; color: #5a5a55; line-height: 1.5; }
+  .block-macros {
+    font-size: 12px;
+    color: #6a6a65;
+    margin-top: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .block-macros strong { color: #1a1a1a; font-weight: 500; }
+
+  .b-sleep { background: #efeefe; }
+  .b-sleep .block-title { color: #534ab7; }
+
+  .b-meal { background: #e6f1fb; }
+  .b-meal .block-title { color: #185fa5; }
+
+  .b-shake { background: #e1f5ee; }
+  .b-shake .block-title { color: #0f6e56; }
+
+  .b-training { background: #fde9e2; }
+  .b-training .block-title { color: #993c1d; }
+
+  .b-walk { background: #eaf3de; }
+  .b-walk .block-title { color: #3b6d11; }
+
+  .b-supps { background: #faeeda; }
+  .b-supps .block-title { color: #854f0b; }
+
+  .exercises {
+    margin-top: 8px;
+    display: grid;
+    gap: 4px;
+  }
+  .exercise {
+    font-size: 12px;
+    color: #5a5a55;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    padding: 2px 0;
+  }
+  .exercise-name { padding-right: 8px; }
+  .exercise-sets {
+    color: #993c1d;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .meal-items {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #5a5a55;
+    line-height: 1.6;
+  }
+
+  @media print {
+    body { background: #fff; padding: 12px; font-size: 11px; }
+    header { background: #1a1a1a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .day-card { page-break-inside: avoid; }
+    .block { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  .notes-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid #e5e5dd;
+    margin-bottom: 16px;
+  }
+  .notes-card h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+  }
+  .notes-card p, .notes-card li {
+    font-size: 13px;
+    color: #4a4a45;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+  .notes-card ul { padding-left: 20px; }
+  .notes-card strong { color: #1a1a1a; font-weight: 500; }
+
+  .warning-banner {
+    background: #faeeda;
+    border-left: 4px solid #ef9f27;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: #633806;
+  }
+  .warning-banner strong { color: #412402; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Plano Semanal v2 — Objectivo Whitfield</h1>
+  <p class="subtitle">117kg → ~93kg | Acordar 5:30 · treino 6:30 · dormir 21:30 (8h sono)</p>
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="label">Dias treino</div>
+      <div class="value">2500<span class="unit">kcal</span></div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Dia recuperação</div>
+      <div class="value">2300<span class="unit">kcal</span></div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Proteína</div>
+      <div class="value">260<span class="unit">g/dia</span></div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Hidratos</div>
+      <div class="value">180<span class="unit">g</span></div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Gordura</div>
+      <div class="value">85<span class="unit">g</span></div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Sono</div>
+      <div class="value">8<span class="unit">horas</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="warning-banner">
+  <strong>Dormir 21:30 é não-negociável.</strong> Se acordas às 5:30 e te deitas tarde, dormes 6h ou menos — o défice come-te o músculo em vez da gordura. O resultado final depende mais do sono do que de qualquer outra variável depois da alimentação.
+</div>
+
+<!-- ============ SEGUNDA ============ -->
+<div class="day-card">
+  <div class="day-header">
+    <div>
+      <div class="day-name">Segunda-feira</div>
+      <div class="day-totals">
+        <span><strong>2500</strong> kcal</span>
+        <span><strong>265</strong>g proteína</span>
+        <span><strong>215</strong>g hidratos</span>
+        <span><strong>71</strong>g gordura</span>
+      </div>
+    </div>
+    <span class="day-tag training">Push A · Peito-foco</span>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-time">05:30</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Acordar</div>
+      <div class="block-detail">500ml água + pitada de sal. Pesar-se em jejum, depois de urinar. Café simples.</div>
+    </div></div>
+
+    <div class="timeline-time">05:45</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pré-treino — Shake rápido</div>
+      <div class="meal-items">1 scoop whey + 1 banana média + 250ml leite magro</div>
+      <div class="block-macros"><strong>280 kcal</strong> · 35P · 38HC · 2G</div>
+    </div></div>
+
+    <div class="timeline-time">06:30</div>
+    <div class="timeline-content"><div class="block b-training">
+      <div class="block-title">Push A — Peito, Ombros, Tríceps</div>
+      <div class="exercises">
+        <div class="exercise"><span class="exercise-name">Supino plano halteres</span><span class="exercise-sets">4 × 6-8 · 22kg</span></div>
+        <div class="exercise"><span class="exercise-name">Supino inclinado halteres</span><span class="exercise-sets">3 × 8-10 · 18kg</span></div>
+        <div class="exercise"><span class="exercise-name">Chest press máquina</span><span class="exercise-sets">3 × 10-12 · 50kg</span></div>
+        <div class="exercise"><span class="exercise-name">Shoulder press máquina</span><span class="exercise-sets">3 × 8-10 · 40kg</span></div>
+        <div class="exercise"><span class="exercise-name">Elevações laterais halteres</span><span class="exercise-sets">4 × 12-15 · 8kg</span></div>
+        <div class="exercise"><span class="exercise-name">Tríceps pushdown</span><span class="exercise-sets">3 × 10-12 · 25kg</span></div>
+        <div class="exercise"><span class="exercise-name">Dips paralelas</span><span class="exercise-sets">3 × máx-2</span></div>
+      </div>
+    </div></div>
+
+    <div class="timeline-time">08:15</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pós-treino — Shake</div>
+      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina monohidratada</div>
+      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
+    </div></div>
+
+    <div class="timeline-time">12:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Almoço</div>
+      <div class="meal-items">200g peito de frango grelhado · 200g arroz basmati cozido · 250g brócolos cozidos · 1 col sopa azeite · salada</div>
+      <div class="block-macros"><strong>800 kcal</strong> · 72P · 75HC · 23G</div>
+    </div></div>
+
+    <div class="timeline-time">13:00</div>
+    <div class="timeline-content"><div class="block b-supps">
+      <div class="block-title">Suplementos almoço</div>
+      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico (lipossolúveis — precisam de gordura)</div>
+    </div></div>
+
+    <div class="timeline-time">16:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Lanche</div>
+      <div class="meal-items">200g skyr ou queijo fresco magro 0% + 1 scoop whey + 25g amêndoas</div>
+      <div class="block-macros"><strong>350 kcal</strong> · 50P · 12HC · 13G</div>
+    </div></div>
+
+    <div class="timeline-time">19:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Jantar</div>
+      <div class="meal-items">200g pescada/bacalhau grelhado · 250g batata cozida · 100g feijão-verde · ½ abacate · salada + 1 col sopa azeite</div>
+      <div class="block-macros"><strong>680 kcal</strong> · 52P · 60HC · 27G</div>
+    </div></div>
+
+    <div class="timeline-time">19:45</div>
+    <div class="timeline-content"><div class="block b-walk">
+      <div class="block-title">Caminhada 5km</div>
+      <div class="block-detail">~45-50 min ritmo confortável. Se chover: 25 min elíptica nível 6.</div>
+    </div></div>
+
+    <div class="timeline-time">20:45</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Ceia — Caseína natural</div>
+      <div class="meal-items">250g queijo fresco magro + canela (digestão lenta — alimenta músculo durante o sono)</div>
+      <div class="block-macros"><strong>200 kcal</strong> · 30P · 8HC · 5G</div>
+    </div></div>
+
+    <div class="timeline-time">21:00</div>
+    <div class="timeline-content"><div class="block b-supps">
+      <div class="block-title">Suplementos noite</div>
+      <div class="meal-items">Magnésio bisglicinato (sono) · Probiótico</div>
+    </div></div>
+
+    <div class="timeline-time">21:30</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Dormir</div>
+      <div class="block-detail">Sem ecrãs após 21:00. Quarto fresco e escuro.</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ============ TERÇA ============ -->
+<div class="day-card">
+  <div class="day-header">
+    <div>
+      <div class="day-name">Terça-feira</div>
+      <div class="day-totals">
+        <span><strong>2500</strong> kcal</span>
+        <span><strong>265</strong>g proteína</span>
+        <span><strong>215</strong>g hidratos</span>
+        <span><strong>71</strong>g gordura</span>
+      </div>
+    </div>
+    <span class="day-tag training">Pull A · Costas-largura</span>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-time">05:30</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Acordar</div>
+      <div class="block-detail">500ml água + sal. Pesar. Café.</div>
+    </div></div>
+
+    <div class="timeline-time">05:45</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pré-treino — Shake</div>
+      <div class="meal-items">1 scoop whey + 1 banana + 250ml leite magro</div>
+      <div class="block-macros"><strong>280 kcal</strong> · 35P · 38HC · 2G</div>
+    </div></div>
+
+    <div class="timeline-time">06:30</div>
+    <div class="timeline-content"><div class="block b-training">
+      <div class="block-title">Pull A — Costas, Bíceps</div>
+      <div class="exercises">
+        <div class="exercise"><span class="exercise-name">Lat pulldown pega larga</span><span class="exercise-sets">4 × 6-10 · 60kg</span></div>
+        <div class="exercise"><span class="exercise-name">Negativas pull-up (assistidas)</span><span class="exercise-sets">3 × 3-5</span></div>
+        <div class="exercise"><span class="exercise-name">Seated row pega neutra</span><span class="exercise-sets">4 × 8-10 · 55kg</span></div>
+        <div class="exercise"><span class="exercise-name">Lat pulldown pega larga</span><span class="exercise-sets">3 × 10-12 · 50kg</span></div>
+        <div class="exercise"><span class="exercise-name">Face pulls poleia</span><span class="exercise-sets">4 × 15 · 20kg</span></div>
+        <div class="exercise"><span class="exercise-name">Rosca barra EZ</span><span class="exercise-sets">3 × 8-10 · 20kg</span></div>
+        <div class="exercise"><span class="exercise-name">Rosca martelo halteres</span><span class="exercise-sets">3 × 10-12 · 12kg</span></div>
+      </div>
+    </div></div>
+
+    <div class="timeline-time">08:15</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pós-treino — Shake</div>
+      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina</div>
+      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
+    </div></div>
+
+    <div class="timeline-time">12:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Almoço</div>
+      <div class="meal-items">200g peito de peru grelhado · 200g massa integral cozida · 250g espinafres salteados · 1 col sopa azeite</div>
+      <div class="block-macros"><strong>800 kcal</strong> · 72P · 75HC · 23G</div>
+    </div></div>
+
+    <div class="timeline-time">13:00</div>
+    <div class="timeline-content"><div class="block b-supps">
+      <div class="block-title">Suplementos almoço</div>
+      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico</div>
+    </div></div>
+
+    <div class="timeline-time">16:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Lanche</div>
+      <div class="meal-items">200g iogurte grego 0% + 1 scoop whey + 25g nozes</div>
+      <div class="block-macros"><strong>350 kcal</strong> · 50P · 12HC · 14G</div>
+    </div></div>
+
+    <div class="timeline-time">19:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Jantar</div>
+      <div class="meal-items">200g lombo de porco magro · 250g batata-doce cozida · 200g brócolos + 50g grão · 1 col sopa azeite</div>
+      <div class="block-macros"><strong>680 kcal</strong> · 54P · 60HC · 25G</div>
+    </div></div>
+
+    <div class="timeline-time">19:45</div>
+    <div class="timeline-content"><div class="block b-walk">
+      <div class="block-title">Caminhada 5km</div>
+      <div class="block-detail">~45-50 min.</div>
+    </div></div>
+
+    <div class="timeline-time">20:45</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Ceia — Caseína</div>
+      <div class="meal-items">250g queijo fresco magro + canela</div>
+      <div class="block-macros"><strong>200 kcal</strong> · 30P · 8HC · 5G</div>
+    </div></div>
+
+    <div class="timeline-time">21:00</div>
+    <div class="timeline-content"><div class="block b-supps">
+      <div class="block-title">Suplementos noite</div>
+      <div class="meal-items">Magnésio bisglicinato · Probiótico</div>
+    </div></div>
+
+    <div class="timeline-time">21:30</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Dormir</div>
+      <div class="block-detail">8h sono.</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ============ QUARTA ============ -->
+<div class="day-card">
+  <div class="day-header">
+    <div>
+      <div class="day-name">Quarta-feira</div>
+      <div class="day-totals">
+        <span><strong>2500</strong> kcal</span>
+        <span><strong>265</strong>g proteína</span>
+        <span><strong>215</strong>g hidratos</span>
+        <span><strong>71</strong>g gordura</span>
+      </div>
+    </div>
+    <span class="day-tag training">Legs A · Quadríceps</span>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-time">05:30</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Acordar</div>
+      <div class="block-detail">500ml água + sal. Pesar. Café.</div>
+    </div></div>
+
+    <div class="timeline-time">05:45</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pré-treino — Shake reforçado (dia de pernas)</div>
+      <div class="meal-items">1 scoop whey + 1 banana + 30g aveia + 250ml leite magro</div>
+      <div class="block-macros"><strong>380 kcal</strong> · 38P · 60HC · 4G</div>
+    </div></div>
+
+    <div class="timeline-time">06:30</div>
+    <div class="timeline-content"><div class="block b-training">
+      <div class="block-title">Legs A — Quadríceps</div>
+      <div class="exercises">
+        <div class="exercise"><span class="exercise-name">Hack squat</span><span class="exercise-sets">4 × 6-8 · 80kg</span></div>
+        <div class="exercise"><span class="exercise-name">Leg press</span><span class="exercise-sets">3 × 10-12 · 140kg</span></div>
+        <div class="exercise"><span class="exercise-name">Leg extension</span><span class="exercise-sets">3 × 12-15 · 40kg</span></div>
+        <div class="exercise"><span class="exercise-name">RDL com halteres</span><span class="exercise-sets">3 × 10-12 · 20kg</span></div>
+        <div class="exercise"><span class="exercise-name">Leg curl</span><span class="exercise-sets">3 × 10-12 · 35kg</span></div>
+        <div class="exercise"><span class="exercise-name">Gémeos no leg press</span><span class="exercise-sets">4 × 12-15 · 100kg</span></div>
+      </div>
+    </div></div>
+
+    <div class="timeline-time">08:15</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pós-treino — Shake</div>
+      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina</div>
+      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
+    </div></div>
+
+    <div class="timeline-time">12:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Almoço</div>
+      <div class="meal-items">200g atum natural (2 latas grandes) · 180g arroz basmati · 250g salada mista · ½ abacate + 1 col sopa azeite</div>
+      <div class="block-macros"><strong>720 kcal</strong> · 65P · 60HC · 23G</div>
+    </div></div>
+
+    <div class="timeline-time">13:00</div>
+    <div class="timeline-content"><div class="block b-supps">
+      <div class="block-title">Suplementos almoço</div>
+      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico</div>
+    </div></div>
+
+    <div class="timeline-time">16:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Lanche</div>
+      <div class="meal-items">200g skyr + 1 scoop whey + 25g amêndoas</div>
+      <div class="block-macros"><strong>350 kcal</strong> · 50P · 12HC · 13G</div>
+    </div></div>
+
+    <div class="timeline-time">19:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Jantar</div>
+      <div class="meal-items">220g bacalhau · 200g batata cozida · 200g feijão-verde + 50g feijão preto · 1 col sopa azeite</div>
+      <div class="block-macros"><strong>620 kcal</strong> · 55P · 55HC · 18G</div>
+    </div></div>
+
+    <div class="timeline-time">19:45</div>
+    <div class="timeline-content"><div class="block b-walk">
+      <div class="block-title">Caminhada leve 3-4km</div>
+      <div class="block-detail">Mais curta no dia de pernas — ajuda recuperação. Ritmo lento.</div>
+    </div></div>
+
+    <div class="timeline-time">20:45</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Ceia — Caseína (reforçada para recuperação de pernas)</div>
+      <div class="meal-items">300g queijo fresco magro + canela + 10g manteiga de amendoim 100%</div>
+      <div class="block-macros"><strong>260 kcal</strong> · 36P · 10HC · 7G</div>
+    </div></div>
+
+    <div class="timeline-time">21:00</div>
+    <div class="timeline-content"><div class="block b-supps">
+      <div class="block-title">Suplementos noite</div>
+      <div class="meal-items">Magnésio bisglicinato · Probiótico</div>
+    </div></div>
+
+    <div class="timeline-time">21:30</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Dormir</div>
+      <div class="block-detail">8h+. Dia de pernas exige sono extra para recuperação.</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ============ QUINTA ============ -->
+<div class="day-card">
+  <div class="day-header">
+    <div>
+      <div class="day-name">Quinta-feira</div>
+      <div class="day-totals">
+        <span><strong>2500</strong> kcal</span>
+        <span><strong>265</strong>g proteína</span>
+        <span><strong>215</strong>g hidratos</span>
+        <span><strong>71</strong>g gordura</span>
+      </div>
+    </div>
+    <span class="day-tag training">Push B · Ombros-foco</span>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-time">05:30</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Acordar</div>
+      <div class="block-detail">500ml água + sal. Pesar. Café.</div>
+    </div></div>
+
+    <div class="timeline-time">05:45</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pré-treino — Shake</div>
+      <div class="meal-items">1 scoop whey + 1 banana + 250ml leite magro</div>
+      <div class="block-macros"><strong>280 kcal</strong> · 35P · 38HC · 2G</div>
+    </div></div>
+
+    <div class="timeline-time">06:30</div>
+    <div class="timeline-content"><div class="block b-training">
+      <div class="block-title">Push B — Ombros, Peito, Tríceps</div>
+      <div class="exercises">
+        <div class="exercise"><span class="exercise-name">Shoulder press halteres sentado</span><span class="exercise-sets">4 × 6-8 · 18kg</span></div>
+        <div class="exercise"><span class="exercise-name">Supino inclinado barra</span><span class="exercise-sets">4 × 8-10 · 50kg</span></div>
+        <div class="exercise"><span class="exercise-name">Peck deck</span><span class="exercise-sets">3 × 10-12 · 45kg</span></div>
+        <div class="exercise"><span class="exercise-name">Crossover poleia (alto p/ baixo)</span><span class="exercise-sets">3 × 12-15 · 12kg</span></div>
+        <div class="exercise"><span class="exercise-name">Elevações laterais poleia</span><span class="exercise-sets">4 × 12-15 · 8kg</span></div>
+        <div class="exercise"><span class="exercise-name">Tríceps francês EZ</span><span class="exercise-sets">3 × 8-10 · 20kg</span></div>
+        <div class="exercise"><span class="exercise-name">Tríceps pushdown corda</span><span class="exercise-sets">3 × 12-15 · 22kg</span></div>
+        <div class="exercise"><span class="exercise-name">Cardio inclinado (passadeira 12%)</span><span class="exercise-sets">20 min · 5 km/h</span></div>
+      </div>
+    </div></div>
+
+    <div class="timeline-time">08:30</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pós-treino — Shake</div>
+      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina</div>
+      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
+    </div></div>
+
+    <div class="timeline-time">12:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Almoço</div>
+      <div class="meal-items">200g peito de frango grelhado · 200g arroz integral · 300g courgette+pimentos salteados · 1 col sopa azeite</div>
+      <div class="block-macros"><strong>800 kcal</strong> · 72P · 75HC · 23G</div>
+    </div></div>
+
+    <div class="timeline-time">13:00</div>
+    <div class="timeline-content"><div class="block b-supps">
+      <div class="block-title">Suplementos almoço</div>
+      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico</div>
+    </div></div>
+
+    <div class="timeline-time">16:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Lanche</div>
+      <div class="meal-items">200g queijo fresco magro + 1 scoop whey + 25g amêndoas</div>
+      <div class="block-macros"><strong>350 kcal</strong> · 52P · 13HC · 13G</div>
+    </div></div>
+
+    <div class="timeline-time">19:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Jantar</div>
+      <div class="meal-items">200g salmão grelhado (gordura boa) · 200g batata cozida · 200g salada verde · ¼ abacate</div>
+      <div class="block-macros"><strong>680 kcal</strong> · 50P · 45HC · 30G</div>
+    </div></div>
+
+    <div class="timeline-time">19:45</div>
+    <div class="timeline-content"><div class="block b-walk">
+      <div class="block-title">Caminhada 5km</div>
+      <div class="block-detail">~45-50 min.</div>
+    </div></div>
+
+    <div class="timeline-time">20:45</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Ceia — Caseína</div>
+      <div class="meal-items">250g queijo fresco magro + canela</div>
+      <div class="block-macros"><strong>200 kcal</strong> · 30P · 8HC · 5G</div>
+    </div></div>
+
+    <div class="timeline-time">21:00</div>
+    <div class="timeline-content"><div class="block b-supps">
+      <div class="block-title">Suplementos noite</div>
+      <div class="meal-items">Magnésio bisglicinato · Probiótico</div>
+    </div></div>
+
+    <div class="timeline-time">21:30</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Dormir</div>
+      <div class="block-detail">8h sono.</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ============ SEXTA ============ -->
+<div class="day-card">
+  <div class="day-header">
+    <div>
+      <div class="day-name">Sexta-feira</div>
+      <div class="day-totals">
+        <span><strong>2500</strong> kcal</span>
+        <span><strong>265</strong>g proteína</span>
+        <span><strong>215</strong>g hidratos</span>
+        <span><strong>71</strong>g gordura</span>
+      </div>
+    </div>
+    <span class="day-tag training">Pull B · Costas-espessura</span>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-time">05:30</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Acordar</div>
+      <div class="block-detail">500ml água + sal. Pesar. Café.</div>
+    </div></div>
+
+    <div class="timeline-time">05:45</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pré-treino — Shake</div>
+      <div class="meal-items">1 scoop whey + 1 banana + 250ml leite magro</div>
+      <div class="block-macros"><strong>280 kcal</strong> · 35P · 38HC · 2G</div>
+    </div></div>
+
+    <div class="timeline-time">06:30</div>
+    <div class="timeline-content"><div class="block b-training">
+      <div class="block-title">Pull B — Costas, Bíceps</div>
+      <div class="exercises">
+        <div class="exercise"><span class="exercise-name">Remada curvada barra</span><span class="exercise-sets">4 × 6-8 · 50kg</span></div>
+        <div class="exercise"><span class="exercise-name">Lat pulldown pega neutra</span><span class="exercise-sets">3 × 8-10 · 55kg</span></div>
+        <div class="exercise"><span class="exercise-name">Remada halter um braço</span><span class="exercise-sets">3 × 10 · 22kg</span></div>
+        <div class="exercise"><span class="exercise-name">Pullover na poleia</span><span class="exercise-sets">3 × 12-15 · 25kg</span></div>
+        <div class="exercise"><span class="exercise-name">Face pulls</span><span class="exercise-sets">3 × 15 · 20kg</span></div>
+        <div class="exercise"><span class="exercise-name">Rosca direta EZ</span><span class="exercise-sets">3 × 10-12 · 22kg</span></div>
+        <div class="exercise"><span class="exercise-name">Rosca concentrada halter</span><span class="exercise-sets">3 × 12 · 10kg</span></div>
+        <div class="exercise"><span class="exercise-name">Cardio inclinado (passadeira 12%)</span><span class="exercise-sets">20 min · 5 km/h</span></div>
+      </div>
+    </div></div>
+
+    <div class="timeline-time">08:30</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pós-treino — Shake</div>
+      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina</div>
+      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
+    </div></div>
+
+    <div class="timeline-time">12:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Almoço</div>
+      <div class="meal-items">200g carne picada peru 5% (hambúrgueres caseiros) · 200g batata-doce · 300g salada · 1 col sopa azeite</div>
+      <div class="block-macros"><strong>800 kcal</strong> · 72P · 75HC · 23G</div>
+    </div></div>
+
+    <div class="timeline-time">13:00</div>
+    <div class="timeline-content"><div class="block b-supps">
+      <div class="block-title">Suplementos almoço</div>
+      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico</div>
+    </div></div>
+
+    <div class="timeline-time">16:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Lanche</div>
+      <div class="meal-items">200g skyr + 1 scoop whey + 25g caju</div>
+      <div class="block-macros"><strong>350 kcal</strong> · 50P · 13HC · 13G</div>
+    </div></div>
+
+    <div class="timeline-time">19:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Jantar</div>
+      <div class="meal-items">220g polvo grelhado ou camarão · 200g arroz · 200g brócolos · 50g lentilhas · 1 col sopa azeite</div>
+      <div class="block-macros"><strong>680 kcal</strong> · 55P · 60HC · 25G</div>
+    </div></div>
+
+    <div class="timeline-time">19:45</div>
+    <div class="timeline-content"><div class="block b-walk">
+      <div class="block-title">Caminhada 5km</div>
+      <div class="block-detail">~45-50 min.</div>
+    </div></div>
+
+    <div class="timeline-time">20:45</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Ceia — Caseína</div>
+      <div class="meal-items">250g queijo fresco magro + canela</div>
+      <div class="block-macros"><strong>200 kcal</strong> · 30P · 8HC · 5G</div>
+    </div></div>
+
+    <div class="timeline-time">21:00</div>
+    <div class="timeline-content"><div class="block b-supps">
+      <div class="block-title">Suplementos noite</div>
+      <div class="meal-items">Magnésio bisglicinato · Probiótico</div>
+    </div></div>
+
+    <div class="timeline-time">21:30</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Dormir</div>
+      <div class="block-detail">8h sono.</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ============ SÁBADO ============ -->
+<div class="day-card">
+  <div class="day-header">
+    <div>
+      <div class="day-name">Sábado</div>
+      <div class="day-totals">
+        <span><strong>2500</strong> kcal</span>
+        <span><strong>265</strong>g proteína</span>
+        <span><strong>215</strong>g hidratos</span>
+        <span><strong>71</strong>g gordura</span>
+      </div>
+    </div>
+    <span class="day-tag training">Legs B · Posteriores e glúteos</span>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-time">07:00</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Acordar (1h30 mais tarde — bem merecido)</div>
+      <div class="block-detail">500ml água + sal. Pesar. Café.</div>
+    </div></div>
+
+    <div class="timeline-time">07:15</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pré-treino — Shake reforçado</div>
+      <div class="meal-items">1 scoop whey + 1 banana + 30g aveia + 250ml leite magro</div>
+      <div class="block-macros"><strong>380 kcal</strong> · 38P · 60HC · 4G</div>
+    </div></div>
+
+    <div class="timeline-time">08:00</div>
+    <div class="timeline-content"><div class="block b-training">
+      <div class="block-title">Legs B — Posteriores e Glúteos</div>
+      <div class="exercises">
+        <div class="exercise"><span class="exercise-name">Hip thrust máquina</span><span class="exercise-sets">4 × 8-10 · 80kg</span></div>
+        <div class="exercise"><span class="exercise-name">Leg press pés altos</span><span class="exercise-sets">4 × 10-12 · 130kg</span></div>
+        <div class="exercise"><span class="exercise-name">Leg curl</span><span class="exercise-sets">4 × 10-12 · 40kg</span></div>
+        <div class="exercise"><span class="exercise-name">RDL com barra</span><span class="exercise-sets">3 × 8-10 · 50kg</span></div>
+        <div class="exercise"><span class="exercise-name">Cadeira abdutora</span><span class="exercise-sets">3 × 15 · 40kg</span></div>
+        <div class="exercise"><span class="exercise-name">Gémeos em pé halteres</span><span class="exercise-sets">4 × 12-15 · 16kg</span></div>
+        <div class="exercise"><span class="exercise-name">Stairmaster final</span><span class="exercise-sets">10-15 min · nível 6-7</span></div>
+      </div>
+    </div></div>
+
+    <div class="timeline-time">09:45</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pós-treino — Shake</div>
+      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina</div>
+      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
+    </div></div>
+
+    <div class="timeline-time">13:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Almoço</div>
+      <div class="meal-items">200g alcatra magra grelhada · 200g arroz · 250g vegetais variados · 1 col sopa azeite</div>
+      <div class="block-macros"><strong>780 kcal</strong> · 70P · 70HC · 22G</div>
+    </div></div>
+
+    <div class="timeline-time">14:00</div>
+    <div class="timeline-content"><div class="block b-supps">
+      <div class="block-title">Suplementos almoço</div>
+      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico</div>
+    </div></div>
+
+    <div class="timeline-time">17:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Lanche</div>
+      <div class="meal-items">200g iogurte grego 0% + 1 scoop whey + 1 fruta + 15g nozes</div>
+      <div class="block-macros"><strong>360 kcal</strong> · 50P · 18HC · 11G</div>
+    </div></div>
+
+    <div class="timeline-time">20:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Jantar — refeição mais flexível</div>
+      <div class="meal-items">Mantém proteína alta (~200g carne/peixe). Podes sair a um restaurante. Evita álcool em excesso (1 cerveja ou 1 copo vinho máx). Sem fritos.</div>
+      <div class="block-macros"><strong>~700 kcal</strong> · 60P · 65HC · 22G</div>
+    </div></div>
+
+    <div class="timeline-time">21:30</div>
+    <div class="timeline-content"><div class="block b-walk">
+      <div class="block-title">Caminhada digestiva 2-3km</div>
+      <div class="block-detail">Curta após jantar. Ajuda digestão antes de dormir.</div>
+    </div></div>
+
+    <div class="timeline-time">22:30</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Ceia — Caseína</div>
+      <div class="meal-items">200g queijo fresco magro (se tiveres fome)</div>
+      <div class="block-macros"><strong>120 kcal</strong> · 22P · 6HC · 1G</div>
+    </div></div>
+
+    <div class="timeline-time">23:00</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Dormir</div>
+      <div class="block-detail">Sábado podes ir 1h30 mais tarde (acordas mais tarde domingo).</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ============ DOMINGO ============ -->
+<div class="day-card">
+  <div class="day-header">
+    <div>
+      <div class="day-name">Domingo</div>
+      <div class="day-totals">
+        <span><strong>2300</strong> kcal</span>
+        <span><strong>250</strong>g proteína</span>
+        <span><strong>170</strong>g hidratos</span>
+        <span><strong>72</strong>g gordura</span>
+      </div>
+    </div>
+    <span class="day-tag recovery">Recuperação activa · Cardio + Core + Mobilidade</span>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-time">08:00</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Acordar</div>
+      <div class="block-detail">500ml água + sal. Pesar. Café tranquilo.</div>
+    </div></div>
+
+    <div class="timeline-time">08:15</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pré-treino — Shake leve</div>
+      <div class="meal-items">1 scoop whey + 1 banana + 200ml água (treino é leve, não precisa de mais)</div>
+      <div class="block-macros"><strong>210 kcal</strong> · 26P · 27HC · 1G</div>
+    </div></div>
+
+    <div class="timeline-time">09:00</div>
+    <div class="timeline-content"><div class="block b-training">
+      <div class="block-title">Recuperação activa — Cardio + Core + Mobilidade</div>
+      <div class="exercises">
+        <div class="exercise"><span class="exercise-name">Passadeira inclinada (incline 10-12%)</span><span class="exercise-sets">30 min · 5 km/h</span></div>
+        <div class="exercise"><span class="exercise-name">Prancha estática</span><span class="exercise-sets">3 × 45-60s</span></div>
+        <div class="exercise"><span class="exercise-name">Hanging leg raises (barra)</span><span class="exercise-sets">3 × 10-12</span></div>
+        <div class="exercise"><span class="exercise-name">Cable crunch (poleia)</span><span class="exercise-sets">3 × 15 · 25kg</span></div>
+        <div class="exercise"><span class="exercise-name">Russian twists</span><span class="exercise-sets">3 × 20 · 8kg</span></div>
+        <div class="exercise"><span class="exercise-name">Alongamento + foam roller</span><span class="exercise-sets">15 min</span></div>
+      </div>
+    </div></div>
+
+    <div class="timeline-time">10:30</div>
+    <div class="timeline-content"><div class="block b-shake">
+      <div class="block-title">Pós-treino — Shake</div>
+      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina (sim, também no descanso)</div>
+      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
+    </div></div>
+
+    <div class="timeline-time">13:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Almoço (preparar refeições da semana — meal prep)</div>
+      <div class="meal-items">200g peito de frango · 150g arroz · 300g vegetais salteados · 50g grão · 1 col sopa azeite</div>
+      <div class="block-macros"><strong>720 kcal</strong> · 70P · 60HC · 22G</div>
+    </div></div>
+
+    <div class="timeline-time">14:00</div>
+    <div class="timeline-content"><div class="block b-supps">
+      <div class="block-title">Suplementos almoço</div>
+      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico</div>
+    </div></div>
+
+    <div class="timeline-time">16:30</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Lanche</div>
+      <div class="meal-items">200g skyr + 1 scoop whey + 25g amêndoas</div>
+      <div class="block-macros"><strong>360 kcal</strong> · 52P · 13HC · 13G</div>
+    </div></div>
+
+    <div class="timeline-time">19:00</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Jantar</div>
+      <div class="meal-items">220g peixe magro · 150g batata cozida · 300g vegetais · ½ abacate</div>
+      <div class="block-macros"><strong>620 kcal</strong> · 56P · 40HC · 25G</div>
+    </div></div>
+
+    <div class="timeline-time">19:45</div>
+    <div class="timeline-content"><div class="block b-walk">
+      <div class="block-title">Caminhada longa 5km</div>
+      <div class="block-detail">Ritmo confortável. Aproveita para descomprimir antes da semana.</div>
+    </div></div>
+
+    <div class="timeline-time">20:45</div>
+    <div class="timeline-content"><div class="block b-meal">
+      <div class="block-title">Ceia — Caseína</div>
+      <div class="meal-items">250g queijo fresco magro + canela</div>
+      <div class="block-macros"><strong>200 kcal</strong> · 30P · 8HC · 5G</div>
+    </div></div>
+
+    <div class="timeline-time">21:00</div>
+    <div class="timeline-content"><div class="block b-supps">
+      <div class="block-title">Suplementos noite</div>
+      <div class="meal-items">Magnésio bisglicinato · Probiótico</div>
+    </div></div>
+
+    <div class="timeline-time">21:30</div>
+    <div class="timeline-content"><div class="block b-sleep">
+      <div class="block-title">Dormir</div>
+      <div class="block-detail">Voltar ao horário cedo — segunda-feira começa às 5:30.</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ============ NOTAS ============ -->
+<div class="section-title">Notas finais</div>
+
+<div class="notes-card">
+  <h3>Porquê treinar em jejum com shake pré-treino</h3>
+  <p>Tecnicamente já não é "treino em jejum" se tomares o shake — e é exactamente isso que queres. O shake de 280 kcal com 35g de proteína:</p>
+  <ul>
+    <li>Quebra o estado catabólico nocturno (cortisol alto + aminoácidos baixos)</li>
+    <li>Dá-te combustível para levantar mais peso</li>
+    <li>Não interfere com a digestão durante o treino (líquido digere em 30-45 min)</li>
+    <li>Reduz perda de músculo durante o défice</li>
+  </ul>
+  <p>15-30 min entre o shake e o início do treino é o ideal. Toma assim que acordas e sai de casa.</p>
+</div>
+
+<div class="notes-card">
+  <h3>Hidratação</h3>
+  <ul>
+    <li><strong>3.5L água/dia</strong>, mais nos dias de pernas (até 4L)</li>
+    <li>500ml ao acordar, 750ml durante o treino, restante distribuído</li>
+    <li>Café/chá pretos à vontade, sem açúcar</li>
+    <li>Refrigerantes só zero, ou nenhum</li>
+  </ul>
+</div>
+
+<div class="notes-card">
+  <h3>O que NÃO falhar</h3>
+  <ul>
+    <li><strong>Shake pré e pós-treino sempre.</strong> Não-negociável.</li>
+    <li><strong>260g proteína todos os dias</strong>, mesmo no domingo.</li>
+    <li><strong>Caminhada diária</strong> — só salta com chuva forte. Substitui por 25 min elíptica.</li>
+    <li><strong>Dormir 21:30 à semana.</strong> Sem isto, perdes músculo em vez de gordura.</li>
+    <li><strong>Pesar comida</strong> com balança digital.</li>
+    <li><strong>Registar tudo</strong> no MyFitnessPal/Cronometer.</li>
+  </ul>
+</div>
+
+<div class="notes-card">
+  <h3>Substituições válidas</h3>
+  <ul>
+    <li><strong>Frango ↔ peru ↔ peixe magro ↔ atum ↔ alcatra magra ↔ lombo de porco magro</strong></li>
+    <li><strong>Arroz ↔ batata ↔ batata-doce ↔ massa integral ↔ pão integral denso</strong></li>
+    <li><strong>Skyr ↔ queijo fresco magro ↔ iogurte grego 0% ↔ requeijão magro</strong></li>
+    <li><strong>Brócolos, couve-flor, espinafres, espargos, courgette, feijão-verde</strong> — vegetais livres</li>
+    <li><strong>Amêndoas ↔ nozes ↔ caju ↔ avelãs</strong> — frutos secos, sempre pesar 25g</li>
+  </ul>
+</div>
+
+<div class="notes-card">
+  <h3>Suplementos — timing</h3>
+  <ul>
+    <li><strong>Whey:</strong> pré-treino + pós-treino + lanche/ceia conforme necessário</li>
+    <li><strong>Creatina 5g:</strong> diariamente, todos os dias incluindo descanso, com a whey pós-treino</li>
+    <li><strong>Ómega 3, D3+K2, Multivitamínico:</strong> ao almoço (precisam de gordura para absorção)</li>
+    <li><strong>Magnésio bisglicinato:</strong> 30 min antes de dormir (sono e recuperação)</li>
+    <li><strong>Probiótico:</strong> à noite</li>
+    <li><strong>Cortar:</strong> Tribulus (sem efeito real), Colágeno (irrelevante para o objectivo)</li>
+  </ul>
+</div>
+
+<div class="notes-card">
+  <h3>Monitorização</h3>
+  <ul>
+    <li><strong>Diário:</strong> peso de manhã em jejum (mas só olha para a média semanal)</li>
+    <li><strong>Semanal:</strong> média do peso, medida da cintura ao umbigo</li>
+    <li><strong>Quinzenal:</strong> fotos frente, lado, costas — mesma luz, mesma hora, mesma roupa</li>
+    <li><strong>Mensal:</strong> bioimpedância da balança</li>
+    <li><strong>Ajuste:</strong> 2 semanas seguidas sem perda → cortar 150 kcal/dia</li>
+  </ul>
+</div>
+
+</div>
+</body>
+</html>
