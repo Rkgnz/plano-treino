@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plano Semanal v2 — Objectivo Whitfield</title>
+<title>Plano Semanal — Objectivo Whitfield</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -11,153 +11,189 @@
     background: #f5f5f0;
     color: #2a2a28;
     line-height: 1.5;
-    padding: 24px;
+    padding: 16px;
+    -webkit-tap-highlight-color: transparent;
   }
-  .container { max-width: 1200px; margin: 0 auto; }
-
+  .container { max-width: 900px; margin: 0 auto; }
   header {
     background: #1a1a1a;
     color: #fff;
-    padding: 32px;
+    padding: 24px;
     border-radius: 12px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
-  header h1 { font-size: 28px; font-weight: 500; margin-bottom: 8px; }
-  header .subtitle { color: #b8b8b0; font-size: 15px; margin-bottom: 24px; }
-
+  header h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  header .subtitle { color: #b8b8b0; font-size: 13px; margin-bottom: 18px; }
   .summary-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 8px;
   }
   .summary-card {
     background: rgba(255,255,255,0.08);
-    padding: 14px 16px;
+    padding: 10px 12px;
     border-radius: 8px;
   }
   .summary-card .label {
-    font-size: 11px;
+    font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: #b8b8b0;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
-  .summary-card .value { font-size: 20px; font-weight: 500; }
-  .summary-card .unit { font-size: 13px; color: #b8b8b0; margin-left: 4px; }
-
-  .section-title {
+  .summary-card .value { font-size: 17px; font-weight: 500; }
+  .summary-card .unit { font-size: 12px; color: #b8b8b0; margin-left: 3px; }
+  .info-banner {
+    background: #e1f5ee;
+    border-left: 4px solid #1d9e75;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #04342c;
+  }
+  .info-banner strong { color: #04342c; }
+  .day-nav {
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #e5e5dd;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .day-btn {
+    border: none;
+    background: transparent;
+    padding: 10px 4px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    color: #5a5a55;
+    transition: background 0.15s;
+  }
+  .day-btn:hover { background: #f0f0e8; }
+  .day-btn.active { background: #1a1a1a; color: #fff; }
+  .day-btn .day-short { display: block; font-size: 11px; opacity: 0.7; margin-bottom: 2px; }
+  .filter-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    background: #fff;
+    padding: 6px;
+    border-radius: 10px;
+    border: 1px solid #e5e5dd;
+  }
+  .filter-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: inherit;
     font-size: 14px;
     font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: #6a6a65;
-    margin: 32px 0 12px 4px;
+    color: #5a5a55;
+    transition: all 0.15s;
   }
-
+  .filter-btn:hover { background: #f0f0e8; }
+  .filter-btn.active { background: #1a1a1a; color: #fff; }
   .day-card {
     background: #fff;
     border-radius: 12px;
-    padding: 24px;
+    padding: 20px;
     margin-bottom: 16px;
     border: 1px solid #e5e5dd;
+    display: none;
   }
+  .day-card.visible { display: block; }
   .day-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 16px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
     border-bottom: 1px solid #efefe8;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
   }
-  .day-name {
-    font-size: 22px;
-    font-weight: 500;
-    color: #1a1a1a;
-  }
+  .day-name { font-size: 20px; font-weight: 500; color: #1a1a1a; }
   .day-tag {
-    font-size: 12px;
-    padding: 5px 12px;
+    font-size: 11px;
+    padding: 4px 10px;
     border-radius: 6px;
     font-weight: 500;
   }
   .day-tag.training { background: #fde9e2; color: #993c1d; }
   .day-tag.recovery { background: #e6f1fb; color: #185fa5; }
-
   .day-totals {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     flex-wrap: wrap;
-    font-size: 13px;
+    font-size: 12px;
     color: #6a6a65;
   }
-  .day-totals span { display: flex; align-items: center; gap: 4px; }
+  .day-totals span { display: flex; align-items: center; gap: 3px; }
   .day-totals strong { color: #1a1a1a; font-weight: 500; }
-
   .timeline {
     display: grid;
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 65px 1fr;
     gap: 0;
   }
   .timeline-time {
-    font-size: 13px;
+    font-size: 12px;
     color: #6a6a65;
-    padding: 14px 12px 14px 0;
+    padding: 12px 10px 12px 0;
     border-right: 2px solid #efefe8;
     font-variant-numeric: tabular-nums;
     font-weight: 500;
   }
   .timeline-content {
-    padding: 14px 0 14px 20px;
+    padding: 12px 0 12px 16px;
     position: relative;
   }
   .timeline-content::before {
     content: '';
     position: absolute;
     left: -7px;
-    top: 18px;
+    top: 16px;
     width: 12px;
     height: 12px;
     border-radius: 50%;
     background: #fff;
     border: 2px solid #d8d8d0;
   }
-
-  .block { padding: 12px 14px; border-radius: 8px; }
+  .block { padding: 10px 12px; border-radius: 8px; }
   .block-title {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     color: #1a1a1a;
   }
-  .block-detail { font-size: 13px; color: #5a5a55; line-height: 1.5; }
+  .block-detail { font-size: 12px; color: #5a5a55; line-height: 1.5; }
   .block-macros {
-    font-size: 12px;
+    font-size: 11px;
     color: #6a6a65;
-    margin-top: 6px;
+    margin-top: 5px;
     font-variant-numeric: tabular-nums;
   }
   .block-macros strong { color: #1a1a1a; font-weight: 500; }
-
   .b-sleep { background: #efeefe; }
   .b-sleep .block-title { color: #534ab7; }
-
   .b-meal { background: #e6f1fb; }
   .b-meal .block-title { color: #185fa5; }
-
   .b-shake { background: #e1f5ee; }
   .b-shake .block-title { color: #0f6e56; }
-
   .b-training { background: #fde9e2; }
   .b-training .block-title { color: #993c1d; }
-
   .b-walk { background: #eaf3de; }
   .b-walk .block-title { color: #3b6d11; }
-
   .b-supps { background: #faeeda; }
   .b-supps .block-title { color: #854f0b; }
-
   .exercises {
     margin-top: 8px;
     display: grid;
@@ -169,895 +205,2188 @@
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 12px;
-    padding: 2px 0;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s;
   }
-  .exercise-name { padding-right: 8px; }
+  .exercise:hover {
+    background: #fff;
+    border-color: #f0c4b0;
+  }
+  .exercise:active { transform: scale(0.98); }
+  .exercise-name {
+    padding-right: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .exercise-name::before {
+    content: 'ⓘ';
+    color: #993c1d;
+    font-size: 13px;
+    opacity: 0.6;
+  }
   .exercise-sets {
     color: #993c1d;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
-
   .meal-items {
-    margin-top: 6px;
+    margin-top: 5px;
     font-size: 12px;
     color: #5a5a55;
     line-height: 1.6;
   }
-
-  @media print {
-    body { background: #fff; padding: 12px; font-size: 11px; }
-    header { background: #1a1a1a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .day-card { page-break-inside: avoid; }
-    .block { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 1000;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
   }
-
+  .modal-overlay.visible {
+    display: flex;
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal {
+    background: #fff;
+    border-radius: 16px 16px 0 0;
+    width: 100%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 24px;
+    animation: slideUp 0.25s ease;
+  }
+  @media (min-width: 700px) {
+    .modal-overlay { align-items: center; padding: 20px; }
+    .modal { border-radius: 16px; }
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #efefe8;
+  }
+  .modal-title { font-size: 18px; font-weight: 500; color: #1a1a1a; }
+  .modal-subtitle { font-size: 13px; color: #993c1d; margin-top: 4px; font-weight: 500; }
+  .modal-close {
+    border: none;
+    background: #f0f0e8;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    color: #5a5a55;
+    flex-shrink: 0;
+  }
+  .modal-close:hover { background: #e5e5dd; }
+  .modal-section { margin-bottom: 18px; }
+  .modal-section h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6a6a65;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .modal-section p, .modal-section li {
+    font-size: 14px;
+    color: #2a2a28;
+    line-height: 1.6;
+    margin-bottom: 4px;
+  }
+  .modal-section ol { padding-left: 20px; }
+  .modal-section ol li::marker {
+    color: #993c1d;
+    font-weight: 500;
+  }
+  .modal-muscles { display: flex; flex-wrap: wrap; gap: 6px; }
+  .muscle-tag {
+    background: #fde9e2;
+    color: #993c1d;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  .muscle-tag.secondary { background: #f0f0e8; color: #5a5a55; }
+  .video-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fde9e2;
+    color: #993c1d;
+    padding: 14px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: background 0.15s;
+  }
+  .video-link:hover { background: #f8d6c4; }
+  .video-link::before { content: '▶'; font-size: 12px; }
+  .tip-box {
+    background: #faeeda;
+    border-left: 3px solid #ef9f27;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #633806;
+    margin-top: 8px;
+  }
+  .tip-box strong { color: #412402; }
   .notes-card {
     background: #fff;
     border-radius: 12px;
-    padding: 24px;
+    padding: 20px;
     border: 1px solid #e5e5dd;
     margin-bottom: 16px;
   }
-  .notes-card h3 {
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 12px;
-    color: #1a1a1a;
-  }
-  .notes-card p, .notes-card li {
-    font-size: 13px;
-    color: #4a4a45;
-    line-height: 1.6;
-    margin-bottom: 6px;
-  }
-  .notes-card ul { padding-left: 20px; }
+  .notes-card h3 { font-size: 15px; font-weight: 500; margin-bottom: 10px; color: #1a1a1a; }
+  .notes-card li { font-size: 13px; color: #4a4a45; line-height: 1.6; margin-bottom: 5px; }
+  .notes-card ul { padding-left: 18px; }
   .notes-card strong { color: #1a1a1a; font-weight: 500; }
-
-  .warning-banner {
-    background: #faeeda;
-    border-left: 4px solid #ef9f27;
-    padding: 14px 18px;
-    border-radius: 8px;
-    margin-bottom: 24px;
-    font-size: 13px;
-    color: #633806;
+  .section-title {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6a6a65;
+    margin: 24px 0 10px 4px;
   }
-  .warning-banner strong { color: #412402; }
 </style>
 </head>
 <body>
 <div class="container">
 
 <header>
-  <h1>Plano Semanal v2 — Objectivo Whitfield</h1>
-  <p class="subtitle">117kg → ~93kg | Acordar 5:30 · treino 6:30 · dormir 21:30 (8h sono)</p>
+  <h1>Plano Semanal — Objectivo Whitfield</h1>
+  <p class="subtitle">117kg → ~93kg · acordar 5:30 · dormir 21:30</p>
   <div class="summary-grid">
     <div class="summary-card">
-      <div class="label">Dias treino</div>
-      <div class="value">2500<span class="unit">kcal</span></div>
+      <div class="label">Treino</div>
+      <div class="value">2461<span class="unit">kcal</span></div>
     </div>
     <div class="summary-card">
-      <div class="label">Dia recuperação</div>
-      <div class="value">2300<span class="unit">kcal</span></div>
+      <div class="label">Descanso</div>
+      <div class="value">2229<span class="unit">kcal</span></div>
     </div>
     <div class="summary-card">
       <div class="label">Proteína</div>
-      <div class="value">260<span class="unit">g/dia</span></div>
+      <div class="value">268<span class="unit">g</span></div>
     </div>
     <div class="summary-card">
-      <div class="label">Hidratos</div>
-      <div class="value">180<span class="unit">g</span></div>
-    </div>
-    <div class="summary-card">
-      <div class="label">Gordura</div>
-      <div class="value">85<span class="unit">g</span></div>
-    </div>
-    <div class="summary-card">
-      <div class="label">Sono</div>
-      <div class="value">8<span class="unit">horas</span></div>
+      <div class="label">Água</div>
+      <div class="value">3.5<span class="unit">L</span></div>
     </div>
   </div>
 </header>
 
-<div class="warning-banner">
-  <strong>Dormir 21:30 é não-negociável.</strong> Se acordas às 5:30 e te deitas tarde, dormes 6h ou menos — o défice come-te o músculo em vez da gordura. O resultado final depende mais do sono do que de qualquer outra variável depois da alimentação.
+<div class="info-banner">
+  <strong>Alimentação repetitiva por design.</strong> Comes praticamente as mesmas refeições todos os dias — é assim que se mantém aderência durante 12 meses. Variar muito é o que faz as pessoas desistirem. Frango, atum, arroz, brócolos, cottage, abacate. Simples, eficaz, repetível.
 </div>
 
-<!-- ============ SEGUNDA ============ -->
-<div class="day-card">
-  <div class="day-header">
-    <div>
-      <div class="day-name">Segunda-feira</div>
-      <div class="day-totals">
-        <span><strong>2500</strong> kcal</span>
-        <span><strong>265</strong>g proteína</span>
-        <span><strong>215</strong>g hidratos</span>
-        <span><strong>71</strong>g gordura</span>
+<nav class="day-nav" id="dayNav">
+  <button class="day-btn" data-day="1"><span class="day-short">2ª</span>Seg</button>
+  <button class="day-btn" data-day="2"><span class="day-short">3ª</span>Ter</button>
+  <button class="day-btn" data-day="3"><span class="day-short">4ª</span>Qua</button>
+  <button class="day-btn" data-day="4"><span class="day-short">5ª</span>Qui</button>
+  <button class="day-btn" data-day="5"><span class="day-short">6ª</span>Sex</button>
+  <button class="day-btn" data-day="6"><span class="day-short">Sáb</span>Sáb</button>
+  <button class="day-btn" data-day="0"><span class="day-short">Dom</span>Dom</button>
+</nav>
+
+<div class="filter-tabs">
+  <button class="filter-btn active" data-filter="training">Treino</button>
+  <button class="filter-btn" data-filter="meals">Refeições</button>
+  <button class="filter-btn" data-filter="all">Tudo</button>
+</div>
+
+<div id="daysContainer"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-subtitle" id="modalSubtitle"></div>
       </div>
+      <button class="modal-close" id="modalClose">×</button>
     </div>
-    <span class="day-tag training">Push A · Peito-foco</span>
-  </div>
-
-  <div class="timeline">
-    <div class="timeline-time">05:30</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Acordar</div>
-      <div class="block-detail">500ml água + pitada de sal. Pesar-se em jejum, depois de urinar. Café simples.</div>
-    </div></div>
-
-    <div class="timeline-time">05:45</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pré-treino — Shake rápido</div>
-      <div class="meal-items">1 scoop whey + 1 banana média + 250ml leite magro</div>
-      <div class="block-macros"><strong>280 kcal</strong> · 35P · 38HC · 2G</div>
-    </div></div>
-
-    <div class="timeline-time">06:30</div>
-    <div class="timeline-content"><div class="block b-training">
-      <div class="block-title">Push A — Peito, Ombros, Tríceps</div>
-      <div class="exercises">
-        <div class="exercise"><span class="exercise-name">Supino plano halteres</span><span class="exercise-sets">4 × 6-8 · 22kg</span></div>
-        <div class="exercise"><span class="exercise-name">Supino inclinado halteres</span><span class="exercise-sets">3 × 8-10 · 18kg</span></div>
-        <div class="exercise"><span class="exercise-name">Chest press máquina</span><span class="exercise-sets">3 × 10-12 · 50kg</span></div>
-        <div class="exercise"><span class="exercise-name">Shoulder press máquina</span><span class="exercise-sets">3 × 8-10 · 40kg</span></div>
-        <div class="exercise"><span class="exercise-name">Elevações laterais halteres</span><span class="exercise-sets">4 × 12-15 · 8kg</span></div>
-        <div class="exercise"><span class="exercise-name">Tríceps pushdown</span><span class="exercise-sets">3 × 10-12 · 25kg</span></div>
-        <div class="exercise"><span class="exercise-name">Dips paralelas</span><span class="exercise-sets">3 × máx-2</span></div>
-      </div>
-    </div></div>
-
-    <div class="timeline-time">08:15</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pós-treino — Shake</div>
-      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina monohidratada</div>
-      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
-    </div></div>
-
-    <div class="timeline-time">12:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Almoço</div>
-      <div class="meal-items">200g peito de frango grelhado · 200g arroz basmati cozido · 250g brócolos cozidos · 1 col sopa azeite · salada</div>
-      <div class="block-macros"><strong>800 kcal</strong> · 72P · 75HC · 23G</div>
-    </div></div>
-
-    <div class="timeline-time">13:00</div>
-    <div class="timeline-content"><div class="block b-supps">
-      <div class="block-title">Suplementos almoço</div>
-      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico (lipossolúveis — precisam de gordura)</div>
-    </div></div>
-
-    <div class="timeline-time">16:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Lanche</div>
-      <div class="meal-items">200g skyr ou queijo fresco magro 0% + 1 scoop whey + 25g amêndoas</div>
-      <div class="block-macros"><strong>350 kcal</strong> · 50P · 12HC · 13G</div>
-    </div></div>
-
-    <div class="timeline-time">19:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Jantar</div>
-      <div class="meal-items">200g pescada/bacalhau grelhado · 250g batata cozida · 100g feijão-verde · ½ abacate · salada + 1 col sopa azeite</div>
-      <div class="block-macros"><strong>680 kcal</strong> · 52P · 60HC · 27G</div>
-    </div></div>
-
-    <div class="timeline-time">19:45</div>
-    <div class="timeline-content"><div class="block b-walk">
-      <div class="block-title">Caminhada 5km</div>
-      <div class="block-detail">~45-50 min ritmo confortável. Se chover: 25 min elíptica nível 6.</div>
-    </div></div>
-
-    <div class="timeline-time">20:45</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Ceia — Caseína natural</div>
-      <div class="meal-items">250g queijo fresco magro + canela (digestão lenta — alimenta músculo durante o sono)</div>
-      <div class="block-macros"><strong>200 kcal</strong> · 30P · 8HC · 5G</div>
-    </div></div>
-
-    <div class="timeline-time">21:00</div>
-    <div class="timeline-content"><div class="block b-supps">
-      <div class="block-title">Suplementos noite</div>
-      <div class="meal-items">Magnésio bisglicinato (sono) · Probiótico</div>
-    </div></div>
-
-    <div class="timeline-time">21:30</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Dormir</div>
-      <div class="block-detail">Sem ecrãs após 21:00. Quarto fresco e escuro.</div>
-    </div></div>
+    <div id="modalContent"></div>
   </div>
 </div>
 
-<!-- ============ TERÇA ============ -->
-<div class="day-card">
-  <div class="day-header">
-    <div>
-      <div class="day-name">Terça-feira</div>
-      <div class="day-totals">
-        <span><strong>2500</strong> kcal</span>
-        <span><strong>265</strong>g proteína</span>
-        <span><strong>215</strong>g hidratos</span>
-        <span><strong>71</strong>g gordura</span>
-      </div>
-    </div>
-    <span class="day-tag training">Pull A · Costas-largura</span>
-  </div>
-
-  <div class="timeline">
-    <div class="timeline-time">05:30</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Acordar</div>
-      <div class="block-detail">500ml água + sal. Pesar. Café.</div>
-    </div></div>
-
-    <div class="timeline-time">05:45</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pré-treino — Shake</div>
-      <div class="meal-items">1 scoop whey + 1 banana + 250ml leite magro</div>
-      <div class="block-macros"><strong>280 kcal</strong> · 35P · 38HC · 2G</div>
-    </div></div>
-
-    <div class="timeline-time">06:30</div>
-    <div class="timeline-content"><div class="block b-training">
-      <div class="block-title">Pull A — Costas, Bíceps</div>
-      <div class="exercises">
-        <div class="exercise"><span class="exercise-name">Lat pulldown pega larga</span><span class="exercise-sets">4 × 6-10 · 60kg</span></div>
-        <div class="exercise"><span class="exercise-name">Negativas pull-up (assistidas)</span><span class="exercise-sets">3 × 3-5</span></div>
-        <div class="exercise"><span class="exercise-name">Seated row pega neutra</span><span class="exercise-sets">4 × 8-10 · 55kg</span></div>
-        <div class="exercise"><span class="exercise-name">Lat pulldown pega larga</span><span class="exercise-sets">3 × 10-12 · 50kg</span></div>
-        <div class="exercise"><span class="exercise-name">Face pulls poleia</span><span class="exercise-sets">4 × 15 · 20kg</span></div>
-        <div class="exercise"><span class="exercise-name">Rosca barra EZ</span><span class="exercise-sets">3 × 8-10 · 20kg</span></div>
-        <div class="exercise"><span class="exercise-name">Rosca martelo halteres</span><span class="exercise-sets">3 × 10-12 · 12kg</span></div>
-      </div>
-    </div></div>
-
-    <div class="timeline-time">08:15</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pós-treino — Shake</div>
-      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina</div>
-      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
-    </div></div>
-
-    <div class="timeline-time">12:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Almoço</div>
-      <div class="meal-items">200g peito de peru grelhado · 200g massa integral cozida · 250g espinafres salteados · 1 col sopa azeite</div>
-      <div class="block-macros"><strong>800 kcal</strong> · 72P · 75HC · 23G</div>
-    </div></div>
-
-    <div class="timeline-time">13:00</div>
-    <div class="timeline-content"><div class="block b-supps">
-      <div class="block-title">Suplementos almoço</div>
-      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico</div>
-    </div></div>
-
-    <div class="timeline-time">16:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Lanche</div>
-      <div class="meal-items">200g iogurte grego 0% + 1 scoop whey + 25g nozes</div>
-      <div class="block-macros"><strong>350 kcal</strong> · 50P · 12HC · 14G</div>
-    </div></div>
-
-    <div class="timeline-time">19:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Jantar</div>
-      <div class="meal-items">200g lombo de porco magro · 250g batata-doce cozida · 200g brócolos + 50g grão · 1 col sopa azeite</div>
-      <div class="block-macros"><strong>680 kcal</strong> · 54P · 60HC · 25G</div>
-    </div></div>
-
-    <div class="timeline-time">19:45</div>
-    <div class="timeline-content"><div class="block b-walk">
-      <div class="block-title">Caminhada 5km</div>
-      <div class="block-detail">~45-50 min.</div>
-    </div></div>
-
-    <div class="timeline-time">20:45</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Ceia — Caseína</div>
-      <div class="meal-items">250g queijo fresco magro + canela</div>
-      <div class="block-macros"><strong>200 kcal</strong> · 30P · 8HC · 5G</div>
-    </div></div>
-
-    <div class="timeline-time">21:00</div>
-    <div class="timeline-content"><div class="block b-supps">
-      <div class="block-title">Suplementos noite</div>
-      <div class="meal-items">Magnésio bisglicinato · Probiótico</div>
-    </div></div>
-
-    <div class="timeline-time">21:30</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Dormir</div>
-      <div class="block-detail">8h sono.</div>
-    </div></div>
-  </div>
-</div>
-
-<!-- ============ QUARTA ============ -->
-<div class="day-card">
-  <div class="day-header">
-    <div>
-      <div class="day-name">Quarta-feira</div>
-      <div class="day-totals">
-        <span><strong>2500</strong> kcal</span>
-        <span><strong>265</strong>g proteína</span>
-        <span><strong>215</strong>g hidratos</span>
-        <span><strong>71</strong>g gordura</span>
-      </div>
-    </div>
-    <span class="day-tag training">Legs A · Quadríceps</span>
-  </div>
-
-  <div class="timeline">
-    <div class="timeline-time">05:30</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Acordar</div>
-      <div class="block-detail">500ml água + sal. Pesar. Café.</div>
-    </div></div>
-
-    <div class="timeline-time">05:45</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pré-treino — Shake reforçado (dia de pernas)</div>
-      <div class="meal-items">1 scoop whey + 1 banana + 30g aveia + 250ml leite magro</div>
-      <div class="block-macros"><strong>380 kcal</strong> · 38P · 60HC · 4G</div>
-    </div></div>
-
-    <div class="timeline-time">06:30</div>
-    <div class="timeline-content"><div class="block b-training">
-      <div class="block-title">Legs A — Quadríceps</div>
-      <div class="exercises">
-        <div class="exercise"><span class="exercise-name">Hack squat</span><span class="exercise-sets">4 × 6-8 · 80kg</span></div>
-        <div class="exercise"><span class="exercise-name">Leg press</span><span class="exercise-sets">3 × 10-12 · 140kg</span></div>
-        <div class="exercise"><span class="exercise-name">Leg extension</span><span class="exercise-sets">3 × 12-15 · 40kg</span></div>
-        <div class="exercise"><span class="exercise-name">RDL com halteres</span><span class="exercise-sets">3 × 10-12 · 20kg</span></div>
-        <div class="exercise"><span class="exercise-name">Leg curl</span><span class="exercise-sets">3 × 10-12 · 35kg</span></div>
-        <div class="exercise"><span class="exercise-name">Gémeos no leg press</span><span class="exercise-sets">4 × 12-15 · 100kg</span></div>
-      </div>
-    </div></div>
-
-    <div class="timeline-time">08:15</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pós-treino — Shake</div>
-      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina</div>
-      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
-    </div></div>
-
-    <div class="timeline-time">12:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Almoço</div>
-      <div class="meal-items">200g atum natural (2 latas grandes) · 180g arroz basmati · 250g salada mista · ½ abacate + 1 col sopa azeite</div>
-      <div class="block-macros"><strong>720 kcal</strong> · 65P · 60HC · 23G</div>
-    </div></div>
-
-    <div class="timeline-time">13:00</div>
-    <div class="timeline-content"><div class="block b-supps">
-      <div class="block-title">Suplementos almoço</div>
-      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico</div>
-    </div></div>
-
-    <div class="timeline-time">16:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Lanche</div>
-      <div class="meal-items">200g skyr + 1 scoop whey + 25g amêndoas</div>
-      <div class="block-macros"><strong>350 kcal</strong> · 50P · 12HC · 13G</div>
-    </div></div>
-
-    <div class="timeline-time">19:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Jantar</div>
-      <div class="meal-items">220g bacalhau · 200g batata cozida · 200g feijão-verde + 50g feijão preto · 1 col sopa azeite</div>
-      <div class="block-macros"><strong>620 kcal</strong> · 55P · 55HC · 18G</div>
-    </div></div>
-
-    <div class="timeline-time">19:45</div>
-    <div class="timeline-content"><div class="block b-walk">
-      <div class="block-title">Caminhada leve 3-4km</div>
-      <div class="block-detail">Mais curta no dia de pernas — ajuda recuperação. Ritmo lento.</div>
-    </div></div>
-
-    <div class="timeline-time">20:45</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Ceia — Caseína (reforçada para recuperação de pernas)</div>
-      <div class="meal-items">300g queijo fresco magro + canela + 10g manteiga de amendoim 100%</div>
-      <div class="block-macros"><strong>260 kcal</strong> · 36P · 10HC · 7G</div>
-    </div></div>
-
-    <div class="timeline-time">21:00</div>
-    <div class="timeline-content"><div class="block b-supps">
-      <div class="block-title">Suplementos noite</div>
-      <div class="meal-items">Magnésio bisglicinato · Probiótico</div>
-    </div></div>
-
-    <div class="timeline-time">21:30</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Dormir</div>
-      <div class="block-detail">8h+. Dia de pernas exige sono extra para recuperação.</div>
-    </div></div>
-  </div>
-</div>
-
-<!-- ============ QUINTA ============ -->
-<div class="day-card">
-  <div class="day-header">
-    <div>
-      <div class="day-name">Quinta-feira</div>
-      <div class="day-totals">
-        <span><strong>2500</strong> kcal</span>
-        <span><strong>265</strong>g proteína</span>
-        <span><strong>215</strong>g hidratos</span>
-        <span><strong>71</strong>g gordura</span>
-      </div>
-    </div>
-    <span class="day-tag training">Push B · Ombros-foco</span>
-  </div>
-
-  <div class="timeline">
-    <div class="timeline-time">05:30</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Acordar</div>
-      <div class="block-detail">500ml água + sal. Pesar. Café.</div>
-    </div></div>
-
-    <div class="timeline-time">05:45</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pré-treino — Shake</div>
-      <div class="meal-items">1 scoop whey + 1 banana + 250ml leite magro</div>
-      <div class="block-macros"><strong>280 kcal</strong> · 35P · 38HC · 2G</div>
-    </div></div>
-
-    <div class="timeline-time">06:30</div>
-    <div class="timeline-content"><div class="block b-training">
-      <div class="block-title">Push B — Ombros, Peito, Tríceps</div>
-      <div class="exercises">
-        <div class="exercise"><span class="exercise-name">Shoulder press halteres sentado</span><span class="exercise-sets">4 × 6-8 · 18kg</span></div>
-        <div class="exercise"><span class="exercise-name">Supino inclinado barra</span><span class="exercise-sets">4 × 8-10 · 50kg</span></div>
-        <div class="exercise"><span class="exercise-name">Peck deck</span><span class="exercise-sets">3 × 10-12 · 45kg</span></div>
-        <div class="exercise"><span class="exercise-name">Crossover poleia (alto p/ baixo)</span><span class="exercise-sets">3 × 12-15 · 12kg</span></div>
-        <div class="exercise"><span class="exercise-name">Elevações laterais poleia</span><span class="exercise-sets">4 × 12-15 · 8kg</span></div>
-        <div class="exercise"><span class="exercise-name">Tríceps francês EZ</span><span class="exercise-sets">3 × 8-10 · 20kg</span></div>
-        <div class="exercise"><span class="exercise-name">Tríceps pushdown corda</span><span class="exercise-sets">3 × 12-15 · 22kg</span></div>
-        <div class="exercise"><span class="exercise-name">Cardio inclinado (passadeira 12%)</span><span class="exercise-sets">20 min · 5 km/h</span></div>
-      </div>
-    </div></div>
-
-    <div class="timeline-time">08:30</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pós-treino — Shake</div>
-      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina</div>
-      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
-    </div></div>
-
-    <div class="timeline-time">12:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Almoço</div>
-      <div class="meal-items">200g peito de frango grelhado · 200g arroz integral · 300g courgette+pimentos salteados · 1 col sopa azeite</div>
-      <div class="block-macros"><strong>800 kcal</strong> · 72P · 75HC · 23G</div>
-    </div></div>
-
-    <div class="timeline-time">13:00</div>
-    <div class="timeline-content"><div class="block b-supps">
-      <div class="block-title">Suplementos almoço</div>
-      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico</div>
-    </div></div>
-
-    <div class="timeline-time">16:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Lanche</div>
-      <div class="meal-items">200g queijo fresco magro + 1 scoop whey + 25g amêndoas</div>
-      <div class="block-macros"><strong>350 kcal</strong> · 52P · 13HC · 13G</div>
-    </div></div>
-
-    <div class="timeline-time">19:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Jantar</div>
-      <div class="meal-items">200g salmão grelhado (gordura boa) · 200g batata cozida · 200g salada verde · ¼ abacate</div>
-      <div class="block-macros"><strong>680 kcal</strong> · 50P · 45HC · 30G</div>
-    </div></div>
-
-    <div class="timeline-time">19:45</div>
-    <div class="timeline-content"><div class="block b-walk">
-      <div class="block-title">Caminhada 5km</div>
-      <div class="block-detail">~45-50 min.</div>
-    </div></div>
-
-    <div class="timeline-time">20:45</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Ceia — Caseína</div>
-      <div class="meal-items">250g queijo fresco magro + canela</div>
-      <div class="block-macros"><strong>200 kcal</strong> · 30P · 8HC · 5G</div>
-    </div></div>
-
-    <div class="timeline-time">21:00</div>
-    <div class="timeline-content"><div class="block b-supps">
-      <div class="block-title">Suplementos noite</div>
-      <div class="meal-items">Magnésio bisglicinato · Probiótico</div>
-    </div></div>
-
-    <div class="timeline-time">21:30</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Dormir</div>
-      <div class="block-detail">8h sono.</div>
-    </div></div>
-  </div>
-</div>
-
-<!-- ============ SEXTA ============ -->
-<div class="day-card">
-  <div class="day-header">
-    <div>
-      <div class="day-name">Sexta-feira</div>
-      <div class="day-totals">
-        <span><strong>2500</strong> kcal</span>
-        <span><strong>265</strong>g proteína</span>
-        <span><strong>215</strong>g hidratos</span>
-        <span><strong>71</strong>g gordura</span>
-      </div>
-    </div>
-    <span class="day-tag training">Pull B · Costas-espessura</span>
-  </div>
-
-  <div class="timeline">
-    <div class="timeline-time">05:30</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Acordar</div>
-      <div class="block-detail">500ml água + sal. Pesar. Café.</div>
-    </div></div>
-
-    <div class="timeline-time">05:45</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pré-treino — Shake</div>
-      <div class="meal-items">1 scoop whey + 1 banana + 250ml leite magro</div>
-      <div class="block-macros"><strong>280 kcal</strong> · 35P · 38HC · 2G</div>
-    </div></div>
-
-    <div class="timeline-time">06:30</div>
-    <div class="timeline-content"><div class="block b-training">
-      <div class="block-title">Pull B — Costas, Bíceps</div>
-      <div class="exercises">
-        <div class="exercise"><span class="exercise-name">Remada curvada barra</span><span class="exercise-sets">4 × 6-8 · 50kg</span></div>
-        <div class="exercise"><span class="exercise-name">Lat pulldown pega neutra</span><span class="exercise-sets">3 × 8-10 · 55kg</span></div>
-        <div class="exercise"><span class="exercise-name">Remada halter um braço</span><span class="exercise-sets">3 × 10 · 22kg</span></div>
-        <div class="exercise"><span class="exercise-name">Pullover na poleia</span><span class="exercise-sets">3 × 12-15 · 25kg</span></div>
-        <div class="exercise"><span class="exercise-name">Face pulls</span><span class="exercise-sets">3 × 15 · 20kg</span></div>
-        <div class="exercise"><span class="exercise-name">Rosca direta EZ</span><span class="exercise-sets">3 × 10-12 · 22kg</span></div>
-        <div class="exercise"><span class="exercise-name">Rosca concentrada halter</span><span class="exercise-sets">3 × 12 · 10kg</span></div>
-        <div class="exercise"><span class="exercise-name">Cardio inclinado (passadeira 12%)</span><span class="exercise-sets">20 min · 5 km/h</span></div>
-      </div>
-    </div></div>
-
-    <div class="timeline-time">08:30</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pós-treino — Shake</div>
-      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina</div>
-      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
-    </div></div>
-
-    <div class="timeline-time">12:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Almoço</div>
-      <div class="meal-items">200g carne picada peru 5% (hambúrgueres caseiros) · 200g batata-doce · 300g salada · 1 col sopa azeite</div>
-      <div class="block-macros"><strong>800 kcal</strong> · 72P · 75HC · 23G</div>
-    </div></div>
-
-    <div class="timeline-time">13:00</div>
-    <div class="timeline-content"><div class="block b-supps">
-      <div class="block-title">Suplementos almoço</div>
-      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico</div>
-    </div></div>
-
-    <div class="timeline-time">16:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Lanche</div>
-      <div class="meal-items">200g skyr + 1 scoop whey + 25g caju</div>
-      <div class="block-macros"><strong>350 kcal</strong> · 50P · 13HC · 13G</div>
-    </div></div>
-
-    <div class="timeline-time">19:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Jantar</div>
-      <div class="meal-items">220g polvo grelhado ou camarão · 200g arroz · 200g brócolos · 50g lentilhas · 1 col sopa azeite</div>
-      <div class="block-macros"><strong>680 kcal</strong> · 55P · 60HC · 25G</div>
-    </div></div>
-
-    <div class="timeline-time">19:45</div>
-    <div class="timeline-content"><div class="block b-walk">
-      <div class="block-title">Caminhada 5km</div>
-      <div class="block-detail">~45-50 min.</div>
-    </div></div>
-
-    <div class="timeline-time">20:45</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Ceia — Caseína</div>
-      <div class="meal-items">250g queijo fresco magro + canela</div>
-      <div class="block-macros"><strong>200 kcal</strong> · 30P · 8HC · 5G</div>
-    </div></div>
-
-    <div class="timeline-time">21:00</div>
-    <div class="timeline-content"><div class="block b-supps">
-      <div class="block-title">Suplementos noite</div>
-      <div class="meal-items">Magnésio bisglicinato · Probiótico</div>
-    </div></div>
-
-    <div class="timeline-time">21:30</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Dormir</div>
-      <div class="block-detail">8h sono.</div>
-    </div></div>
-  </div>
-</div>
-
-<!-- ============ SÁBADO ============ -->
-<div class="day-card">
-  <div class="day-header">
-    <div>
-      <div class="day-name">Sábado</div>
-      <div class="day-totals">
-        <span><strong>2500</strong> kcal</span>
-        <span><strong>265</strong>g proteína</span>
-        <span><strong>215</strong>g hidratos</span>
-        <span><strong>71</strong>g gordura</span>
-      </div>
-    </div>
-    <span class="day-tag training">Legs B · Posteriores e glúteos</span>
-  </div>
-
-  <div class="timeline">
-    <div class="timeline-time">07:00</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Acordar (1h30 mais tarde — bem merecido)</div>
-      <div class="block-detail">500ml água + sal. Pesar. Café.</div>
-    </div></div>
-
-    <div class="timeline-time">07:15</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pré-treino — Shake reforçado</div>
-      <div class="meal-items">1 scoop whey + 1 banana + 30g aveia + 250ml leite magro</div>
-      <div class="block-macros"><strong>380 kcal</strong> · 38P · 60HC · 4G</div>
-    </div></div>
-
-    <div class="timeline-time">08:00</div>
-    <div class="timeline-content"><div class="block b-training">
-      <div class="block-title">Legs B — Posteriores e Glúteos</div>
-      <div class="exercises">
-        <div class="exercise"><span class="exercise-name">Hip thrust máquina</span><span class="exercise-sets">4 × 8-10 · 80kg</span></div>
-        <div class="exercise"><span class="exercise-name">Leg press pés altos</span><span class="exercise-sets">4 × 10-12 · 130kg</span></div>
-        <div class="exercise"><span class="exercise-name">Leg curl</span><span class="exercise-sets">4 × 10-12 · 40kg</span></div>
-        <div class="exercise"><span class="exercise-name">RDL com barra</span><span class="exercise-sets">3 × 8-10 · 50kg</span></div>
-        <div class="exercise"><span class="exercise-name">Cadeira abdutora</span><span class="exercise-sets">3 × 15 · 40kg</span></div>
-        <div class="exercise"><span class="exercise-name">Gémeos em pé halteres</span><span class="exercise-sets">4 × 12-15 · 16kg</span></div>
-        <div class="exercise"><span class="exercise-name">Stairmaster final</span><span class="exercise-sets">10-15 min · nível 6-7</span></div>
-      </div>
-    </div></div>
-
-    <div class="timeline-time">09:45</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pós-treino — Shake</div>
-      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina</div>
-      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
-    </div></div>
-
-    <div class="timeline-time">13:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Almoço</div>
-      <div class="meal-items">200g alcatra magra grelhada · 200g arroz · 250g vegetais variados · 1 col sopa azeite</div>
-      <div class="block-macros"><strong>780 kcal</strong> · 70P · 70HC · 22G</div>
-    </div></div>
-
-    <div class="timeline-time">14:00</div>
-    <div class="timeline-content"><div class="block b-supps">
-      <div class="block-title">Suplementos almoço</div>
-      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico</div>
-    </div></div>
-
-    <div class="timeline-time">17:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Lanche</div>
-      <div class="meal-items">200g iogurte grego 0% + 1 scoop whey + 1 fruta + 15g nozes</div>
-      <div class="block-macros"><strong>360 kcal</strong> · 50P · 18HC · 11G</div>
-    </div></div>
-
-    <div class="timeline-time">20:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Jantar — refeição mais flexível</div>
-      <div class="meal-items">Mantém proteína alta (~200g carne/peixe). Podes sair a um restaurante. Evita álcool em excesso (1 cerveja ou 1 copo vinho máx). Sem fritos.</div>
-      <div class="block-macros"><strong>~700 kcal</strong> · 60P · 65HC · 22G</div>
-    </div></div>
-
-    <div class="timeline-time">21:30</div>
-    <div class="timeline-content"><div class="block b-walk">
-      <div class="block-title">Caminhada digestiva 2-3km</div>
-      <div class="block-detail">Curta após jantar. Ajuda digestão antes de dormir.</div>
-    </div></div>
-
-    <div class="timeline-time">22:30</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Ceia — Caseína</div>
-      <div class="meal-items">200g queijo fresco magro (se tiveres fome)</div>
-      <div class="block-macros"><strong>120 kcal</strong> · 22P · 6HC · 1G</div>
-    </div></div>
-
-    <div class="timeline-time">23:00</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Dormir</div>
-      <div class="block-detail">Sábado podes ir 1h30 mais tarde (acordas mais tarde domingo).</div>
-    </div></div>
-  </div>
-</div>
-
-<!-- ============ DOMINGO ============ -->
-<div class="day-card">
-  <div class="day-header">
-    <div>
-      <div class="day-name">Domingo</div>
-      <div class="day-totals">
-        <span><strong>2300</strong> kcal</span>
-        <span><strong>250</strong>g proteína</span>
-        <span><strong>170</strong>g hidratos</span>
-        <span><strong>72</strong>g gordura</span>
-      </div>
-    </div>
-    <span class="day-tag recovery">Recuperação activa · Cardio + Core + Mobilidade</span>
-  </div>
-
-  <div class="timeline">
-    <div class="timeline-time">08:00</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Acordar</div>
-      <div class="block-detail">500ml água + sal. Pesar. Café tranquilo.</div>
-    </div></div>
-
-    <div class="timeline-time">08:15</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pré-treino — Shake leve</div>
-      <div class="meal-items">1 scoop whey + 1 banana + 200ml água (treino é leve, não precisa de mais)</div>
-      <div class="block-macros"><strong>210 kcal</strong> · 26P · 27HC · 1G</div>
-    </div></div>
-
-    <div class="timeline-time">09:00</div>
-    <div class="timeline-content"><div class="block b-training">
-      <div class="block-title">Recuperação activa — Cardio + Core + Mobilidade</div>
-      <div class="exercises">
-        <div class="exercise"><span class="exercise-name">Passadeira inclinada (incline 10-12%)</span><span class="exercise-sets">30 min · 5 km/h</span></div>
-        <div class="exercise"><span class="exercise-name">Prancha estática</span><span class="exercise-sets">3 × 45-60s</span></div>
-        <div class="exercise"><span class="exercise-name">Hanging leg raises (barra)</span><span class="exercise-sets">3 × 10-12</span></div>
-        <div class="exercise"><span class="exercise-name">Cable crunch (poleia)</span><span class="exercise-sets">3 × 15 · 25kg</span></div>
-        <div class="exercise"><span class="exercise-name">Russian twists</span><span class="exercise-sets">3 × 20 · 8kg</span></div>
-        <div class="exercise"><span class="exercise-name">Alongamento + foam roller</span><span class="exercise-sets">15 min</span></div>
-      </div>
-    </div></div>
-
-    <div class="timeline-time">10:30</div>
-    <div class="timeline-content"><div class="block b-shake">
-      <div class="block-title">Pós-treino — Shake</div>
-      <div class="meal-items">1 scoop whey + 1 maçã + 5g creatina (sim, também no descanso)</div>
-      <div class="block-macros"><strong>190 kcal</strong> · 26P · 22HC · 1G</div>
-    </div></div>
-
-    <div class="timeline-time">13:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Almoço (preparar refeições da semana — meal prep)</div>
-      <div class="meal-items">200g peito de frango · 150g arroz · 300g vegetais salteados · 50g grão · 1 col sopa azeite</div>
-      <div class="block-macros"><strong>720 kcal</strong> · 70P · 60HC · 22G</div>
-    </div></div>
-
-    <div class="timeline-time">14:00</div>
-    <div class="timeline-content"><div class="block b-supps">
-      <div class="block-title">Suplementos almoço</div>
-      <div class="meal-items">Ómega 3 · D3+K2 · Multivitamínico</div>
-    </div></div>
-
-    <div class="timeline-time">16:30</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Lanche</div>
-      <div class="meal-items">200g skyr + 1 scoop whey + 25g amêndoas</div>
-      <div class="block-macros"><strong>360 kcal</strong> · 52P · 13HC · 13G</div>
-    </div></div>
-
-    <div class="timeline-time">19:00</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Jantar</div>
-      <div class="meal-items">220g peixe magro · 150g batata cozida · 300g vegetais · ½ abacate</div>
-      <div class="block-macros"><strong>620 kcal</strong> · 56P · 40HC · 25G</div>
-    </div></div>
-
-    <div class="timeline-time">19:45</div>
-    <div class="timeline-content"><div class="block b-walk">
-      <div class="block-title">Caminhada longa 5km</div>
-      <div class="block-detail">Ritmo confortável. Aproveita para descomprimir antes da semana.</div>
-    </div></div>
-
-    <div class="timeline-time">20:45</div>
-    <div class="timeline-content"><div class="block b-meal">
-      <div class="block-title">Ceia — Caseína</div>
-      <div class="meal-items">250g queijo fresco magro + canela</div>
-      <div class="block-macros"><strong>200 kcal</strong> · 30P · 8HC · 5G</div>
-    </div></div>
-
-    <div class="timeline-time">21:00</div>
-    <div class="timeline-content"><div class="block b-supps">
-      <div class="block-title">Suplementos noite</div>
-      <div class="meal-items">Magnésio bisglicinato · Probiótico</div>
-    </div></div>
-
-    <div class="timeline-time">21:30</div>
-    <div class="timeline-content"><div class="block b-sleep">
-      <div class="block-title">Dormir</div>
-      <div class="block-detail">Voltar ao horário cedo — segunda-feira começa às 5:30.</div>
-    </div></div>
-  </div>
-</div>
-
-<!-- ============ NOTAS ============ -->
-<div class="section-title">Notas finais</div>
+<div class="section-title">Lista de compras semanal</div>
 
 <div class="notes-card">
-  <h3>Porquê treinar em jejum com shake pré-treino</h3>
-  <p>Tecnicamente já não é "treino em jejum" se tomares o shake — e é exactamente isso que queres. O shake de 280 kcal com 35g de proteína:</p>
+  <h3>Quantidades para 1 semana (1 pessoa)</h3>
   <ul>
-    <li>Quebra o estado catabólico nocturno (cortisol alto + aminoácidos baixos)</li>
-    <li>Dá-te combustível para levantar mais peso</li>
-    <li>Não interfere com a digestão durante o treino (líquido digere em 30-45 min)</li>
-    <li>Reduz perda de músculo durante o défice</li>
+    <li><strong>Peito de frango:</strong> ~1.5kg (300g/dia × 5 dias semana + sábado/domingo)</li>
+    <li><strong>Atum em água:</strong> 14 latas (2 por dia × 7 dias)</li>
+    <li><strong>Queijo cottage:</strong> ~4kg (550g/dia)</li>
+    <li><strong>Ovos:</strong> 1 dúzia (para alternativas de lanche)</li>
+    <li><strong>Arroz integral/basmati:</strong> 700g cru (≈ 1.7kg cozido para a semana)</li>
+    <li><strong>Brócolos:</strong> ~2.8kg (400g/dia, frescos ou congelados)</li>
+    <li><strong>Abacate:</strong> 7-8 abacates médios</li>
+    <li><strong>Alface:</strong> 2-3 alfaces grandes</li>
+    <li><strong>Bananas:</strong> 7-8 (1 por dia para pré-treino)</li>
+    <li><strong>Maçãs:</strong> 7 (1 por dia pós-treino)</li>
+    <li><strong>Amêndoas cruas:</strong> 200g (25g/dia × 6-7 dias)</li>
+    <li><strong>Azeite extra-virgem:</strong> 1 col sopa/dia</li>
+    <li><strong>Limões:</strong> 2-3 (para o abacate/guacamole caseiro)</li>
+    <li><strong>Whey isolado:</strong> ~600g (4 doses/dia × 7 = ~840g (28 doses de 30g))</li>
   </ul>
-  <p>15-30 min entre o shake e o início do treino é o ideal. Toma assim que acordas e sai de casa.</p>
 </div>
 
+<div class="section-title">Notas essenciais</div>
+
 <div class="notes-card">
-  <h3>Hidratação</h3>
+  <h3>Guacamole caseiro (2 min)</h3>
   <ul>
-    <li><strong>3.5L água/dia</strong>, mais nos dias de pernas (até 4L)</li>
-    <li>500ml ao acordar, 750ml durante o treino, restante distribuído</li>
-    <li>Café/chá pretos à vontade, sem açúcar</li>
-    <li>Refrigerantes só zero, ou nenhum</li>
+    <li>1 abacate maduro esmagado com garfo</li>
+    <li>Sumo de ½ limão (evita oxidação)</li>
+    <li>Sal e pimenta a gosto</li>
+    <li>Opcional: coentros picados, gota de azeite</li>
+    <li><strong>Comprado dá 200-280 kcal/100g vs 160 kcal do abacate puro</strong> — diferença de 3kg de gordura num ano se for diário.</li>
   </ul>
 </div>
 
 <div class="notes-card">
-  <h3>O que NÃO falhar</h3>
+  <h3>O que não falhar</h3>
   <ul>
-    <li><strong>Shake pré e pós-treino sempre.</strong> Não-negociável.</li>
-    <li><strong>260g proteína todos os dias</strong>, mesmo no domingo.</li>
-    <li><strong>Caminhada diária</strong> — só salta com chuva forte. Substitui por 25 min elíptica.</li>
+    <li><strong>Shake pré-treino sempre.</strong> Quebra o catabolismo nocturno. Não-negociável.</li>
+    <li><strong>268g proteína todos os dias</strong>, mesmo no descanso.</li>
     <li><strong>Dormir 21:30 à semana.</strong> Sem isto, perdes músculo em vez de gordura.</li>
-    <li><strong>Pesar comida</strong> com balança digital.</li>
-    <li><strong>Registar tudo</strong> no MyFitnessPal/Cronometer.</li>
+    <li><strong>Caminhada diária</strong> — só salta com chuva forte. Senão, 25 min elíptica.</li>
+    <li><strong>Pesar comida</strong> com balança digital e registar no MyFitnessPal.</li>
   </ul>
 </div>
 
 <div class="notes-card">
-  <h3>Substituições válidas</h3>
+  <h3>Substituições válidas (dentro da tua lista)</h3>
   <ul>
-    <li><strong>Frango ↔ peru ↔ peixe magro ↔ atum ↔ alcatra magra ↔ lombo de porco magro</strong></li>
-    <li><strong>Arroz ↔ batata ↔ batata-doce ↔ massa integral ↔ pão integral denso</strong></li>
-    <li><strong>Skyr ↔ queijo fresco magro ↔ iogurte grego 0% ↔ requeijão magro</strong></li>
-    <li><strong>Brócolos, couve-flor, espinafres, espargos, courgette, feijão-verde</strong> — vegetais livres</li>
-    <li><strong>Amêndoas ↔ nozes ↔ caju ↔ avelãs</strong> — frutos secos, sempre pesar 25g</li>
+    <li><strong>Atum ↔ frango ↔ ovos cozidos</strong> — proteínas magras intercambiáveis</li>
+    <li><strong>Arroz integral ↔ arroz basmati</strong></li>
+    <li><strong>Whey no lanche ↔ 4 claras cozidas</strong> — se quiseres comida sólida</li>
+    <li><strong>Abacate ↔ ½ abacate + 1 col sopa azeite</strong> — se preferires</li>
   </ul>
 </div>
 
 <div class="notes-card">
-  <h3>Suplementos — timing</h3>
+  <h3>Suplementos · timing correcto</h3>
   <ul>
-    <li><strong>Whey:</strong> pré-treino + pós-treino + lanche/ceia conforme necessário</li>
-    <li><strong>Creatina 5g:</strong> diariamente, todos os dias incluindo descanso, com a whey pós-treino</li>
-    <li><strong>Ómega 3, D3+K2, Multivitamínico:</strong> ao almoço (precisam de gordura para absorção)</li>
-    <li><strong>Magnésio bisglicinato:</strong> 30 min antes de dormir (sono e recuperação)</li>
-    <li><strong>Probiótico:</strong> à noite</li>
-    <li><strong>Cortar:</strong> Tribulus (sem efeito real), Colágeno (irrelevante para o objectivo)</li>
-  </ul>
-</div>
-
-<div class="notes-card">
-  <h3>Monitorização</h3>
-  <ul>
-    <li><strong>Diário:</strong> peso de manhã em jejum (mas só olha para a média semanal)</li>
-    <li><strong>Semanal:</strong> média do peso, medida da cintura ao umbigo</li>
-    <li><strong>Quinzenal:</strong> fotos frente, lado, costas — mesma luz, mesma hora, mesma roupa</li>
-    <li><strong>Mensal:</strong> bioimpedância da balança</li>
-    <li><strong>Ajuste:</strong> 2 semanas seguidas sem perda → cortar 150 kcal/dia</li>
+    <li><strong>Whey:</strong> pré-treino + pós-treino + lanche</li>
+    <li><strong>Creatina 5g:</strong> diária, todos os dias, com whey pós-treino</li>
+    <li><strong>Ómega 3, D3+K2, Multivitamínico:</strong> ao almoço (precisam de gordura)</li>
+    <li><strong>Magnésio bisglicinato:</strong> 30 min antes de dormir</li>
+    <li><strong>Cortar:</strong> Tribulus e Colágeno (não servem para este objectivo)</li>
   </ul>
 </div>
 
 </div>
+
+<script>
+const DAYS = {
+  "1": {
+    "name": "Segunda-feira",
+    "tag": "Push A · Peito-foco",
+    "tagClass": "training",
+    "totals": {
+      "kcal": 2461,
+      "prot": 268,
+      "carbs": 195,
+      "fat": 84
+    },
+    "timeline": [
+      {
+        "time": "05:30",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Acordar",
+        "detail": "500ml água + pitada de sal. Pesar-se em jejum. Café simples."
+      },
+      {
+        "time": "05:45",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pré-treino — Shake",
+        "items": "30g whey + 1 banana média + 250ml água",
+        "macros": {
+          "kcal": 215,
+          "p": 26,
+          "c": 29,
+          "f": 1
+        }
+      },
+      {
+        "time": "06:30",
+        "type": "training",
+        "cat": "training",
+        "title": "Push A — Peito, Ombros, Tríceps",
+        "exercises": [
+          {
+            "name": "Supino plano halteres",
+            "sets": "4 × 6-8 · 22kg",
+            "key": "db_bench_flat"
+          },
+          {
+            "name": "Supino inclinado halteres",
+            "sets": "3 × 8-10 · 18kg",
+            "key": "db_bench_incline"
+          },
+          {
+            "name": "Chest press máquina",
+            "sets": "3 × 10-12 · 50kg",
+            "key": "chest_press"
+          },
+          {
+            "name": "Shoulder press máquina",
+            "sets": "3 × 8-10 · 40kg",
+            "key": "shoulder_press_machine"
+          },
+          {
+            "name": "Elevações laterais halteres",
+            "sets": "4 × 12-15 · 8kg",
+            "key": "lateral_raise"
+          },
+          {
+            "name": "Tríceps pushdown",
+            "sets": "3 × 10-12 · 25kg",
+            "key": "tricep_pushdown"
+          },
+          {
+            "name": "Dips paralelas",
+            "sets": "3 × máx-2",
+            "key": "dips"
+          }
+        ]
+      },
+      {
+        "time": "08:15",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pós-treino — Shake",
+        "items": "30g whey + 1 maçã + 5g creatina monohidratada",
+        "macros": {
+          "kcal": 205,
+          "p": 25,
+          "c": 27,
+          "f": 1
+        }
+      },
+      {
+        "time": "12:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Almoço",
+        "items": "200g peito de frango grelhado · 150g arroz cozido (integral ou basmati) · 200g brócolos · 100g abacate fresco esmagado com sumo de limão · 1 col sopa azeite · alface à vontade",
+        "macros": {
+          "kcal": 805,
+          "p": 73,
+          "c": 62,
+          "f": 33
+        }
+      },
+      {
+        "time": "13:00",
+        "type": "supps",
+        "cat": "meals",
+        "title": "Suplementos almoço",
+        "items": "Ómega 3 · D3+K2 · Multivitamínico (com gordura para absorção)"
+      },
+      {
+        "time": "16:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Lanche",
+        "items": "300g queijo cottage + 30g whey misturada + 25g amêndoas",
+        "macros": {
+          "kcal": 493,
+          "p": 64,
+          "c": 17,
+          "f": 21
+        }
+      },
+      {
+        "time": "19:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Jantar",
+        "items": "2 latas de atum em água (160g escorrido) · 100g arroz cozido · 200g brócolos · 100g abacate fresco esmagado · alface à vontade",
+        "macros": {
+          "kcal": 555,
+          "p": 52,
+          "c": 52,
+          "f": 23
+        }
+      },
+      {
+        "time": "19:45",
+        "type": "walk",
+        "cat": "meals",
+        "title": "Caminhada 5km",
+        "detail": "~45-50 min ritmo confortável. Se chover: 25 min elíptica nível 6."
+      },
+      {
+        "time": "20:45",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Ceia — Caseína natural",
+        "items": "250g queijo cottage + canela (digestão lenta — alimenta músculo durante o sono)",
+        "macros": {
+          "kcal": 188,
+          "p": 28,
+          "c": 8,
+          "f": 5
+        }
+      },
+      {
+        "time": "21:00",
+        "type": "supps",
+        "cat": "meals",
+        "title": "Suplementos noite",
+        "items": "Magnésio bisglicinato (sono) · Probiótico"
+      },
+      {
+        "time": "21:30",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Dormir",
+        "detail": "8h sono. Sem ecrãs após 21:00."
+      }
+    ]
+  },
+  "2": {
+    "name": "Terça-feira",
+    "tag": "Pull A · Costas-largura",
+    "tagClass": "training",
+    "totals": {
+      "kcal": 2461,
+      "prot": 268,
+      "carbs": 195,
+      "fat": 84
+    },
+    "timeline": [
+      {
+        "time": "05:30",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Acordar",
+        "detail": "500ml água + pitada de sal. Pesar-se em jejum. Café simples."
+      },
+      {
+        "time": "05:45",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pré-treino — Shake",
+        "items": "30g whey + 1 banana média + 250ml água",
+        "macros": {
+          "kcal": 215,
+          "p": 26,
+          "c": 29,
+          "f": 1
+        }
+      },
+      {
+        "time": "06:30",
+        "type": "training",
+        "cat": "training",
+        "title": "Pull A — Costas, Bíceps",
+        "exercises": [
+          {
+            "name": "Lat pulldown pega larga",
+            "sets": "4 × 6-10 · 60kg",
+            "key": "lat_pulldown_wide"
+          },
+          {
+            "name": "Negativas pull-up (assistidas)",
+            "sets": "3 × 3-5",
+            "key": "pullup_negative"
+          },
+          {
+            "name": "Seated row pega neutra",
+            "sets": "4 × 8-10 · 55kg",
+            "key": "seated_row_neutral"
+          },
+          {
+            "name": "Lat pulldown pega larga",
+            "sets": "3 × 10-12 · 50kg",
+            "key": "lat_pulldown_wide"
+          },
+          {
+            "name": "Face pulls poleia",
+            "sets": "4 × 15 · 20kg",
+            "key": "face_pull"
+          },
+          {
+            "name": "Rosca barra EZ",
+            "sets": "3 × 8-10 · 20kg",
+            "key": "ez_curl"
+          },
+          {
+            "name": "Rosca martelo halteres",
+            "sets": "3 × 10-12 · 12kg",
+            "key": "hammer_curl"
+          }
+        ]
+      },
+      {
+        "time": "08:15",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pós-treino — Shake",
+        "items": "30g whey + 1 maçã + 5g creatina monohidratada",
+        "macros": {
+          "kcal": 205,
+          "p": 25,
+          "c": 27,
+          "f": 1
+        }
+      },
+      {
+        "time": "12:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Almoço",
+        "items": "200g peito de frango grelhado · 150g arroz cozido (integral ou basmati) · 200g brócolos · 100g abacate fresco esmagado com sumo de limão · 1 col sopa azeite · alface à vontade",
+        "macros": {
+          "kcal": 805,
+          "p": 73,
+          "c": 62,
+          "f": 33
+        }
+      },
+      {
+        "time": "13:00",
+        "type": "supps",
+        "cat": "meals",
+        "title": "Suplementos almoço",
+        "items": "Ómega 3 · D3+K2 · Multivitamínico (com gordura para absorção)"
+      },
+      {
+        "time": "16:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Lanche",
+        "items": "300g queijo cottage + 30g whey misturada + 25g amêndoas",
+        "macros": {
+          "kcal": 493,
+          "p": 64,
+          "c": 17,
+          "f": 21
+        }
+      },
+      {
+        "time": "19:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Jantar",
+        "items": "2 latas de atum em água (160g escorrido) · 100g arroz cozido · 200g brócolos · 100g abacate fresco esmagado · alface à vontade",
+        "macros": {
+          "kcal": 555,
+          "p": 52,
+          "c": 52,
+          "f": 23
+        }
+      },
+      {
+        "time": "19:45",
+        "type": "walk",
+        "cat": "meals",
+        "title": "Caminhada 5km",
+        "detail": "~45-50 min ritmo confortável. Se chover: 25 min elíptica nível 6."
+      },
+      {
+        "time": "20:45",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Ceia — Caseína natural",
+        "items": "250g queijo cottage + canela (digestão lenta — alimenta músculo durante o sono)",
+        "macros": {
+          "kcal": 188,
+          "p": 28,
+          "c": 8,
+          "f": 5
+        }
+      },
+      {
+        "time": "21:00",
+        "type": "supps",
+        "cat": "meals",
+        "title": "Suplementos noite",
+        "items": "Magnésio bisglicinato (sono) · Probiótico"
+      },
+      {
+        "time": "21:30",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Dormir",
+        "detail": "8h sono. Sem ecrãs após 21:00."
+      }
+    ]
+  },
+  "3": {
+    "name": "Quarta-feira",
+    "tag": "Legs A · Quadríceps",
+    "tagClass": "training",
+    "totals": {
+      "kcal": 2461,
+      "prot": 268,
+      "carbs": 195,
+      "fat": 84
+    },
+    "timeline": [
+      {
+        "time": "05:30",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Acordar",
+        "detail": "500ml água + pitada de sal. Pesar-se em jejum. Café simples."
+      },
+      {
+        "time": "05:45",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pré-treino — Shake reforçado (dia de pernas)",
+        "items": "30g whey + 1 banana + 30g aveia + 300ml água",
+        "macros": {
+          "kcal": 325,
+          "p": 30,
+          "c": 49,
+          "f": 3
+        }
+      },
+      {
+        "time": "06:30",
+        "type": "training",
+        "cat": "training",
+        "title": "Legs A — Quadríceps",
+        "exercises": [
+          {
+            "name": "Hack squat",
+            "sets": "4 × 6-8 · 80kg",
+            "key": "hack_squat"
+          },
+          {
+            "name": "Leg press",
+            "sets": "3 × 10-12 · 140kg",
+            "key": "leg_press"
+          },
+          {
+            "name": "Leg extension",
+            "sets": "3 × 12-15 · 40kg",
+            "key": "leg_extension"
+          },
+          {
+            "name": "RDL com halteres",
+            "sets": "3 × 10-12 · 20kg",
+            "key": "rdl_db"
+          },
+          {
+            "name": "Leg curl",
+            "sets": "3 × 10-12 · 35kg",
+            "key": "leg_curl"
+          },
+          {
+            "name": "Gémeos no leg press",
+            "sets": "4 × 12-15 · 100kg",
+            "key": "calf_leg_press"
+          }
+        ]
+      },
+      {
+        "time": "08:15",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pós-treino — Shake",
+        "items": "30g whey + 1 maçã + 5g creatina monohidratada",
+        "macros": {
+          "kcal": 205,
+          "p": 25,
+          "c": 27,
+          "f": 1
+        }
+      },
+      {
+        "time": "12:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Almoço",
+        "items": "200g peito de frango grelhado · 150g arroz cozido (integral ou basmati) · 200g brócolos · 100g abacate fresco esmagado com sumo de limão · 1 col sopa azeite · alface à vontade",
+        "macros": {
+          "kcal": 805,
+          "p": 73,
+          "c": 62,
+          "f": 33
+        }
+      },
+      {
+        "time": "13:00",
+        "type": "supps",
+        "cat": "meals",
+        "title": "Suplementos almoço",
+        "items": "Ómega 3 · D3+K2 · Multivitamínico (com gordura para absorção)"
+      },
+      {
+        "time": "16:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Lanche",
+        "items": "300g queijo cottage + 30g whey misturada + 25g amêndoas",
+        "macros": {
+          "kcal": 493,
+          "p": 64,
+          "c": 17,
+          "f": 21
+        }
+      },
+      {
+        "time": "19:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Jantar",
+        "items": "2 latas de atum em água (160g escorrido) · 100g arroz cozido · 200g brócolos · 100g abacate fresco esmagado · alface à vontade",
+        "macros": {
+          "kcal": 555,
+          "p": 52,
+          "c": 52,
+          "f": 23
+        }
+      },
+      {
+        "time": "19:45",
+        "type": "walk",
+        "cat": "meals",
+        "title": "Caminhada leve 3-4km",
+        "detail": "Mais curta nos dias de pernas — ajuda recuperação. Ritmo lento."
+      },
+      {
+        "time": "20:45",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Ceia — Caseína natural",
+        "items": "250g queijo cottage + canela (digestão lenta — alimenta músculo durante o sono)",
+        "macros": {
+          "kcal": 188,
+          "p": 28,
+          "c": 8,
+          "f": 5
+        }
+      },
+      {
+        "time": "21:00",
+        "type": "supps",
+        "cat": "meals",
+        "title": "Suplementos noite",
+        "items": "Magnésio bisglicinato (sono) · Probiótico"
+      },
+      {
+        "time": "21:30",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Dormir",
+        "detail": "8h sono. Sem ecrãs após 21:00."
+      }
+    ]
+  },
+  "4": {
+    "name": "Quinta-feira",
+    "tag": "Push B · Ombros-foco",
+    "tagClass": "training",
+    "totals": {
+      "kcal": 2461,
+      "prot": 268,
+      "carbs": 195,
+      "fat": 84
+    },
+    "timeline": [
+      {
+        "time": "05:30",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Acordar",
+        "detail": "500ml água + pitada de sal. Pesar-se em jejum. Café simples."
+      },
+      {
+        "time": "05:45",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pré-treino — Shake",
+        "items": "30g whey + 1 banana média + 250ml água",
+        "macros": {
+          "kcal": 215,
+          "p": 26,
+          "c": 29,
+          "f": 1
+        }
+      },
+      {
+        "time": "06:30",
+        "type": "training",
+        "cat": "training",
+        "title": "Push B — Ombros, Peito, Tríceps",
+        "exercises": [
+          {
+            "name": "Shoulder press halteres sentado",
+            "sets": "4 × 6-8 · 18kg",
+            "key": "shoulder_press_db"
+          },
+          {
+            "name": "Supino inclinado barra",
+            "sets": "4 × 8-10 · 50kg",
+            "key": "incline_bench_bar"
+          },
+          {
+            "name": "Peck deck",
+            "sets": "3 × 10-12 · 45kg",
+            "key": "pec_deck"
+          },
+          {
+            "name": "Crossover poleia (alto p/ baixo)",
+            "sets": "3 × 12-15 · 12kg",
+            "key": "cable_crossover"
+          },
+          {
+            "name": "Elevações laterais poleia",
+            "sets": "4 × 12-15 · 8kg",
+            "key": "cable_lateral_raise"
+          },
+          {
+            "name": "Tríceps francês EZ",
+            "sets": "3 × 8-10 · 20kg",
+            "key": "french_press"
+          },
+          {
+            "name": "Tríceps pushdown corda",
+            "sets": "3 × 12-15 · 22kg",
+            "key": "rope_pushdown"
+          },
+          {
+            "name": "Cardio inclinado (passadeira 12%)",
+            "sets": "20 min · 5 km/h",
+            "key": "incline_treadmill"
+          }
+        ]
+      },
+      {
+        "time": "08:15",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pós-treino — Shake",
+        "items": "30g whey + 1 maçã + 5g creatina monohidratada",
+        "macros": {
+          "kcal": 205,
+          "p": 25,
+          "c": 27,
+          "f": 1
+        }
+      },
+      {
+        "time": "12:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Almoço",
+        "items": "200g peito de frango grelhado · 150g arroz cozido (integral ou basmati) · 200g brócolos · 100g abacate fresco esmagado com sumo de limão · 1 col sopa azeite · alface à vontade",
+        "macros": {
+          "kcal": 805,
+          "p": 73,
+          "c": 62,
+          "f": 33
+        }
+      },
+      {
+        "time": "13:00",
+        "type": "supps",
+        "cat": "meals",
+        "title": "Suplementos almoço",
+        "items": "Ómega 3 · D3+K2 · Multivitamínico (com gordura para absorção)"
+      },
+      {
+        "time": "16:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Lanche",
+        "items": "300g queijo cottage + 30g whey misturada + 25g amêndoas",
+        "macros": {
+          "kcal": 493,
+          "p": 64,
+          "c": 17,
+          "f": 21
+        }
+      },
+      {
+        "time": "19:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Jantar",
+        "items": "2 latas de atum em água (160g escorrido) · 100g arroz cozido · 200g brócolos · 100g abacate fresco esmagado · alface à vontade",
+        "macros": {
+          "kcal": 555,
+          "p": 52,
+          "c": 52,
+          "f": 23
+        }
+      },
+      {
+        "time": "19:45",
+        "type": "walk",
+        "cat": "meals",
+        "title": "Caminhada 5km",
+        "detail": "~45-50 min ritmo confortável. Se chover: 25 min elíptica nível 6."
+      },
+      {
+        "time": "20:45",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Ceia — Caseína natural",
+        "items": "250g queijo cottage + canela (digestão lenta — alimenta músculo durante o sono)",
+        "macros": {
+          "kcal": 188,
+          "p": 28,
+          "c": 8,
+          "f": 5
+        }
+      },
+      {
+        "time": "21:00",
+        "type": "supps",
+        "cat": "meals",
+        "title": "Suplementos noite",
+        "items": "Magnésio bisglicinato (sono) · Probiótico"
+      },
+      {
+        "time": "21:30",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Dormir",
+        "detail": "8h sono. Sem ecrãs após 21:00."
+      }
+    ]
+  },
+  "5": {
+    "name": "Sexta-feira",
+    "tag": "Pull B · Costas-espessura",
+    "tagClass": "training",
+    "totals": {
+      "kcal": 2461,
+      "prot": 268,
+      "carbs": 195,
+      "fat": 84
+    },
+    "timeline": [
+      {
+        "time": "05:30",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Acordar",
+        "detail": "500ml água + pitada de sal. Pesar-se em jejum. Café simples."
+      },
+      {
+        "time": "05:45",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pré-treino — Shake",
+        "items": "30g whey + 1 banana média + 250ml água",
+        "macros": {
+          "kcal": 215,
+          "p": 26,
+          "c": 29,
+          "f": 1
+        }
+      },
+      {
+        "time": "06:30",
+        "type": "training",
+        "cat": "training",
+        "title": "Pull B — Costas, Bíceps",
+        "exercises": [
+          {
+            "name": "Remada curvada barra",
+            "sets": "4 × 6-8 · 50kg",
+            "key": "barbell_row"
+          },
+          {
+            "name": "Lat pulldown pega neutra",
+            "sets": "3 × 8-10 · 55kg",
+            "key": "lat_pulldown_neutral"
+          },
+          {
+            "name": "Remada halter um braço",
+            "sets": "3 × 10 · 22kg",
+            "key": "one_arm_db_row"
+          },
+          {
+            "name": "Pullover na poleia",
+            "sets": "3 × 12-15 · 25kg",
+            "key": "cable_pullover"
+          },
+          {
+            "name": "Face pulls",
+            "sets": "3 × 15 · 20kg",
+            "key": "face_pull"
+          },
+          {
+            "name": "Rosca direta EZ",
+            "sets": "3 × 10-12 · 22kg",
+            "key": "ez_curl"
+          },
+          {
+            "name": "Rosca concentrada halter",
+            "sets": "3 × 12 · 10kg",
+            "key": "concentration_curl"
+          },
+          {
+            "name": "Cardio inclinado (passadeira 12%)",
+            "sets": "20 min · 5 km/h",
+            "key": "incline_treadmill"
+          }
+        ]
+      },
+      {
+        "time": "08:15",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pós-treino — Shake",
+        "items": "30g whey + 1 maçã + 5g creatina monohidratada",
+        "macros": {
+          "kcal": 205,
+          "p": 25,
+          "c": 27,
+          "f": 1
+        }
+      },
+      {
+        "time": "12:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Almoço",
+        "items": "200g peito de frango grelhado · 150g arroz cozido (integral ou basmati) · 200g brócolos · 100g abacate fresco esmagado com sumo de limão · 1 col sopa azeite · alface à vontade",
+        "macros": {
+          "kcal": 805,
+          "p": 73,
+          "c": 62,
+          "f": 33
+        }
+      },
+      {
+        "time": "13:00",
+        "type": "supps",
+        "cat": "meals",
+        "title": "Suplementos almoço",
+        "items": "Ómega 3 · D3+K2 · Multivitamínico (com gordura para absorção)"
+      },
+      {
+        "time": "16:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Lanche",
+        "items": "300g queijo cottage + 30g whey misturada + 25g amêndoas",
+        "macros": {
+          "kcal": 493,
+          "p": 64,
+          "c": 17,
+          "f": 21
+        }
+      },
+      {
+        "time": "19:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Jantar",
+        "items": "2 latas de atum em água (160g escorrido) · 100g arroz cozido · 200g brócolos · 100g abacate fresco esmagado · alface à vontade",
+        "macros": {
+          "kcal": 555,
+          "p": 52,
+          "c": 52,
+          "f": 23
+        }
+      },
+      {
+        "time": "19:45",
+        "type": "walk",
+        "cat": "meals",
+        "title": "Caminhada 5km",
+        "detail": "~45-50 min ritmo confortável. Se chover: 25 min elíptica nível 6."
+      },
+      {
+        "time": "20:45",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Ceia — Caseína natural",
+        "items": "250g queijo cottage + canela (digestão lenta — alimenta músculo durante o sono)",
+        "macros": {
+          "kcal": 188,
+          "p": 28,
+          "c": 8,
+          "f": 5
+        }
+      },
+      {
+        "time": "21:00",
+        "type": "supps",
+        "cat": "meals",
+        "title": "Suplementos noite",
+        "items": "Magnésio bisglicinato (sono) · Probiótico"
+      },
+      {
+        "time": "21:30",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Dormir",
+        "detail": "8h sono. Sem ecrãs após 21:00."
+      }
+    ]
+  },
+  "6": {
+    "name": "Sábado",
+    "tag": "Legs B · Posteriores e glúteos",
+    "tagClass": "training",
+    "totals": {
+      "kcal": 2461,
+      "prot": 268,
+      "carbs": 195,
+      "fat": 84
+    },
+    "timeline": [
+      {
+        "time": "07:00",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Acordar",
+        "detail": "500ml água + sal. Pesar. Café."
+      },
+      {
+        "time": "07:15",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pré-treino — Shake reforçado",
+        "items": "30g whey + 1 banana + 30g aveia + 300ml água",
+        "macros": {
+          "kcal": 325,
+          "p": 30,
+          "c": 49,
+          "f": 3
+        }
+      },
+      {
+        "time": "08:00",
+        "type": "training",
+        "cat": "training",
+        "title": "Legs B — Posteriores e Glúteos",
+        "exercises": [
+          {
+            "name": "Hip thrust máquina",
+            "sets": "4 × 8-10 · 80kg",
+            "key": "hip_thrust"
+          },
+          {
+            "name": "Leg press pés altos",
+            "sets": "4 × 10-12 · 130kg",
+            "key": "leg_press_high_feet"
+          },
+          {
+            "name": "Leg curl",
+            "sets": "4 × 10-12 · 40kg",
+            "key": "leg_curl"
+          },
+          {
+            "name": "RDL com barra",
+            "sets": "3 × 8-10 · 50kg",
+            "key": "rdl_bar"
+          },
+          {
+            "name": "Cadeira abdutora",
+            "sets": "3 × 15 · 40kg",
+            "key": "hip_abductor"
+          },
+          {
+            "name": "Gémeos em pé halteres",
+            "sets": "4 × 12-15 · 16kg",
+            "key": "standing_calf_db"
+          },
+          {
+            "name": "Stairmaster final",
+            "sets": "10-15 min · nível 6-7",
+            "key": "stairmaster"
+          }
+        ]
+      },
+      {
+        "time": "09:45",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pós-treino — Shake",
+        "items": "30g whey + 1 maçã + 5g creatina",
+        "macros": {
+          "kcal": 205,
+          "p": 25,
+          "c": 27,
+          "f": 1
+        }
+      },
+      {
+        "time": "13:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Almoço",
+        "items": "200g peito de frango grelhado · 150g arroz · 200g brócolos · 100g abacate · alface · 1 col sopa azeite",
+        "macros": {
+          "kcal": 805,
+          "p": 73,
+          "c": 62,
+          "f": 33
+        }
+      },
+      {
+        "time": "14:00",
+        "type": "supps",
+        "cat": "meals",
+        "title": "Suplementos",
+        "items": "Ómega 3 · D3+K2 · Multivitamínico"
+      },
+      {
+        "time": "17:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Lanche",
+        "items": "300g queijo cottage + 30g whey misturada + 25g amêndoas",
+        "macros": {
+          "kcal": 493,
+          "p": 64,
+          "c": 17,
+          "f": 21
+        }
+      },
+      {
+        "time": "20:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Jantar — refeição mais flexível",
+        "items": "Manter proteína ~200g frango/atum. Podes sair a um restaurante. 1 cerveja ou copo de vinho máx. Sem fritos. Acompanhamento de arroz/batata.",
+        "macros": {
+          "kcal": 700,
+          "p": 60,
+          "c": 65,
+          "f": 22
+        }
+      },
+      {
+        "time": "21:30",
+        "type": "walk",
+        "cat": "meals",
+        "title": "Caminhada digestiva 2-3km",
+        "detail": "Curta após jantar."
+      },
+      {
+        "time": "22:30",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Ceia opcional",
+        "items": "200g queijo cottage (se houver fome)",
+        "macros": {
+          "kcal": 150,
+          "p": 22,
+          "c": 6,
+          "f": 4
+        }
+      },
+      {
+        "time": "23:00",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Dormir",
+        "detail": "Domingo acordas às 8h, então podes ir mais tarde."
+      }
+    ]
+  },
+  "0": {
+    "name": "Domingo",
+    "tag": "Recuperação activa · Cardio + Core",
+    "tagClass": "recovery",
+    "totals": {
+      "kcal": 2229,
+      "prot": 251,
+      "carbs": 175,
+      "fat": 67
+    },
+    "timeline": [
+      {
+        "time": "08:00",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Acordar",
+        "detail": "500ml água + sal. Pesar. Café."
+      },
+      {
+        "time": "08:15",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pré-treino — Shake leve",
+        "items": "30g whey + 1 banana + 200ml água",
+        "macros": {
+          "kcal": 215,
+          "p": 26,
+          "c": 27,
+          "f": 1
+        }
+      },
+      {
+        "time": "09:00",
+        "type": "training",
+        "cat": "training",
+        "title": "Recuperação activa — Cardio + Core + Mobilidade",
+        "exercises": [
+          {
+            "name": "Passadeira inclinada (incline 10-12%)",
+            "sets": "30 min · 5 km/h",
+            "key": "incline_treadmill"
+          },
+          {
+            "name": "Prancha estática",
+            "sets": "3 × 45-60s",
+            "key": "plank"
+          },
+          {
+            "name": "Hanging leg raises (barra)",
+            "sets": "3 × 10-12",
+            "key": "hanging_leg_raise"
+          },
+          {
+            "name": "Cable crunch (poleia)",
+            "sets": "3 × 15 · 25kg",
+            "key": "cable_crunch"
+          },
+          {
+            "name": "Russian twists",
+            "sets": "3 × 20 · 8kg",
+            "key": "russian_twist"
+          },
+          {
+            "name": "Alongamento + foam roller",
+            "sets": "15 min",
+            "key": "mobility"
+          }
+        ]
+      },
+      {
+        "time": "10:30",
+        "type": "shake",
+        "cat": "meals",
+        "title": "Pós-treino — Shake",
+        "items": "30g whey + 1 maçã + 5g creatina",
+        "macros": {
+          "kcal": 205,
+          "p": 25,
+          "c": 27,
+          "f": 1
+        }
+      },
+      {
+        "time": "13:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Almoço (porção mais pequena — dia descanso)",
+        "items": "200g peito de frango · 120g arroz · 200g brócolos · 75g abacate · alface · 1 col chá azeite",
+        "macros": {
+          "kcal": 720,
+          "p": 70,
+          "c": 50,
+          "f": 28
+        }
+      },
+      {
+        "time": "14:00",
+        "type": "supps",
+        "cat": "meals",
+        "title": "Suplementos",
+        "items": "Ómega 3 · D3+K2 · Multivitamínico"
+      },
+      {
+        "time": "16:30",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Lanche",
+        "items": "250g queijo cottage + 30g whey + 20g amêndoas",
+        "macros": {
+          "kcal": 414,
+          "p": 56,
+          "c": 14,
+          "f": 16
+        }
+      },
+      {
+        "time": "19:00",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Jantar",
+        "items": "2 latas atum (160g escorrido) · 100g arroz · 200g brócolos · 75g abacate · alface",
+        "macros": {
+          "kcal": 525,
+          "p": 52,
+          "c": 49,
+          "f": 18
+        }
+      },
+      {
+        "time": "19:45",
+        "type": "walk",
+        "cat": "meals",
+        "title": "Caminhada 5km",
+        "detail": "Ritmo confortável. Descomprime antes da semana."
+      },
+      {
+        "time": "20:45",
+        "type": "meal",
+        "cat": "meals",
+        "title": "Ceia — Caseína",
+        "items": "200g queijo cottage + canela",
+        "macros": {
+          "kcal": 150,
+          "p": 22,
+          "c": 6,
+          "f": 4
+        }
+      },
+      {
+        "time": "21:00",
+        "type": "supps",
+        "cat": "meals",
+        "title": "Suplementos noite",
+        "items": "Magnésio bisglicinato (sono) · Probiótico"
+      },
+      {
+        "time": "21:30",
+        "type": "sleep",
+        "cat": "all",
+        "title": "Dormir",
+        "detail": "Voltar ao horário cedo — segunda começa às 5:30."
+      }
+    ]
+  }
+};
+
+// ============================================================
+const EXERCISES = {
+  db_bench_flat: {
+    name: 'Supino plano com halteres',
+    muscles: { primary: ['Peitoral'], secondary: ['Tríceps', 'Deltoide anterior'] },
+    execution: [
+      'Deita-te no banco plano com um haltere em cada mão, ao nível do peito',
+      'Pés bem assentes no chão, omoplatas juntas e pressionadas no banco',
+      'Empurra os halteres para cima até quase tocarem no topo, sem trancar cotovelos',
+      'Desce controlado em 2-3 segundos até sentir alongamento no peito',
+      'Mantém os cotovelos a ~45° do tronco (não totalmente abertos)'
+    ],
+    tips: 'A vantagem dos halteres sobre a barra é a maior amplitude — desce até realmente sentires o peito esticar.',
+    mistakes: 'Cotovelos demasiado abertos (sobrecarga no ombro). Não juntar as omoplatas. Bater os halteres em cima.'
+  },
+  db_bench_incline: {
+    name: 'Supino inclinado com halteres',
+    muscles: { primary: ['Peitoral superior'], secondary: ['Deltoide anterior', 'Tríceps'] },
+    execution: [
+      'Banco inclinado a 30-45° (mais inclinado = mais ombro, menos peito)',
+      'Halteres ao nível do peito superior, palmas para a frente',
+      'Empurra para cima sem bloquear cotovelos',
+      'Desce até sentir estiramento no peito superior'
+    ],
+    tips: '30° é o ângulo ideal para peito superior. Acima de 45° transforma-se quase num shoulder press.',
+    mistakes: 'Inclinar demasiado o banco. Arquear excessivamente as costas.'
+  },
+  chest_press: {
+    name: 'Chest press máquina',
+    muscles: { primary: ['Peitoral'], secondary: ['Tríceps', 'Deltoide anterior'] },
+    execution: [
+      'Ajusta a altura do assento para que as pegas fiquem ao nível do meio do peito',
+      'Costas pressionadas no encosto, omoplatas juntas',
+      'Empurra as pegas para a frente sem trancar cotovelos',
+      'Regresso controlado, sem deixar a placa "bater" no fim'
+    ],
+    tips: 'Boa opção para terminar o treino quando os estabilizadores já estão cansados — máquina elimina equilíbrio.',
+    mistakes: 'Levantar os ombros (encolher). Bloquear os cotovelos no fim. Movimento demasiado rápido.'
+  },
+  shoulder_press_machine: {
+    name: 'Shoulder press máquina',
+    muscles: { primary: ['Deltoides'], secondary: ['Tríceps', 'Trapézio'] },
+    execution: [
+      'Ajusta o assento para que as pegas fiquem à altura dos ombros',
+      'Costas no encosto, core contraído',
+      'Empurra para cima sem trancar os braços completamente',
+      'Desce controlado até sentir alongamento nos ombros'
+    ],
+    tips: 'Não encolhas os ombros durante o movimento — mantém-nos baixos e estáveis.',
+    mistakes: 'Arquear a lombar. Subir os ombros (envolve trapézio em vez de deltoide). Movimento parcial.'
+  },
+  shoulder_press_db: {
+    name: 'Shoulder press com halteres sentado',
+    muscles: { primary: ['Deltoides'], secondary: ['Tríceps', 'Trapézio'] },
+    execution: [
+      'Sentado num banco com encosto, halteres ao nível dos ombros, palmas para a frente',
+      'Core contraído, costas direitas no encosto',
+      'Empurra os halteres para cima até quase se tocarem',
+      'Desce até sentir os deltoides esticarem (cotovelos abaixo da linha dos ombros)'
+    ],
+    tips: 'Versão mais exigente que a máquina — mais estabilização. Começa com peso conservador.',
+    mistakes: 'Bater os halteres no topo. Inclinar-se para trás (transforma-se em supino inclinado).'
+  },
+  incline_bench_bar: {
+    name: 'Supino inclinado com barra',
+    muscles: { primary: ['Peitoral superior'], secondary: ['Deltoide anterior', 'Tríceps'] },
+    execution: [
+      'Banco inclinado a 30°, barra acima dos olhos',
+      'Pega ligeiramente mais larga que os ombros',
+      'Desce a barra até ao peito superior (linha das clavículas) em 2-3 segundos',
+      'Empurra de volta sem trancar cotovelos'
+    ],
+    tips: 'Tocar levemente no peito — não deixar a barra "ressaltar". Controlo é tudo.',
+    mistakes: 'Pega demasiado larga. Não tocar no peito (amplitude curta). Arquear excessivamente.'
+  },
+  lateral_raise: {
+    name: 'Elevações laterais com halteres',
+    muscles: { primary: ['Deltoide lateral'], secondary: ['Trapézio'] },
+    execution: [
+      'De pé, halteres ao lado do corpo, leve flexão dos cotovelos',
+      'Sobe os halteres para os lados até à altura dos ombros (não acima)',
+      'No topo, os cotovelos devem estar ligeiramente acima dos pulsos',
+      'Desce controlado em 2-3 segundos'
+    ],
+    tips: 'Imagina que estás a verter um jarro de água — palmas ligeiramente viradas para baixo no topo. Para ombros realmente magnéticos, vai a 12-15 reps com peso que conseguires controlar.',
+    mistakes: 'Usar momento (balançar). Subir acima dos ombros (envolve trapézio). Peso demasiado pesado.'
+  },
+  cable_lateral_raise: {
+    name: 'Elevações laterais na poleia',
+    muscles: { primary: ['Deltoide lateral'], secondary: ['Trapézio'] },
+    execution: [
+      'Polia ajustada para a posição mais baixa',
+      'Pega com a mão oposta ao cabo (cruzando o corpo)',
+      'Sobe o braço lateralmente até à altura do ombro',
+      'Controla o regresso à posição inicial'
+    ],
+    tips: 'A poleia mantém tensão constante ao longo de todo o movimento — diferente dos halteres que só tensionam no topo.',
+    mistakes: 'Pega errada. Movimento com tronco. Peso excessivo.'
+  },
+  tricep_pushdown: {
+    name: 'Tríceps pushdown na poleia',
+    muscles: { primary: ['Tríceps'], secondary: [] },
+    execution: [
+      'Pega na barra reta ou em V, polia em cima',
+      'Cotovelos colados ao tronco, antebraços paralelos ao chão',
+      'Estende os antebraços para baixo até trancar (quase) os cotovelos',
+      'Regresso controlado mantendo os cotovelos fixos'
+    ],
+    tips: 'O cotovelo é a articulação fixa — só os antebraços se devem mover.',
+    mistakes: 'Cotovelos a afastarem-se do corpo. Usar o tronco para empurrar. Pega demasiado afastada.'
+  },
+  rope_pushdown: {
+    name: 'Tríceps pushdown com corda',
+    muscles: { primary: ['Tríceps'], secondary: [] },
+    execution: [
+      'Pega com cada mão numa ponta da corda, polia em cima',
+      'Cotovelos colados ao tronco',
+      'Empurra para baixo e abre as pontas no fim (palmas viradas para fora)',
+      'Regresso lento'
+    ],
+    tips: 'O ponto-chave é "abrir" a corda no fim — activa mais a cabeça lateral do tríceps.',
+    mistakes: 'Não abrir a corda no fim. Cotovelos a moverem-se. Velocidade excessiva.'
+  },
+  french_press: {
+    name: 'Tríceps francês com barra EZ',
+    muscles: { primary: ['Tríceps (cabeça longa)'], secondary: [] },
+    execution: [
+      'Deitado no banco plano, barra EZ acima da cabeça com braços estendidos',
+      'Cotovelos apontados ao tecto, fixos',
+      'Flecte os cotovelos descendo a barra na direcção da testa',
+      'Estende os antebraços de volta sem mover os cotovelos'
+    ],
+    tips: 'Também conhecido como "skull crusher" — desce próximo à testa, não atrás da cabeça.',
+    mistakes: 'Mover os cotovelos (afasta-se do alvo). Pegar com mãos demasiado largas. Peso excessivo.'
+  },
+  dips: {
+    name: 'Dips em paralelas',
+    muscles: { primary: ['Peitoral inferior', 'Tríceps'], secondary: ['Deltoide anterior'] },
+    execution: [
+      'Subir até ao topo das paralelas com braços estendidos',
+      'Desce controlado flectindo os cotovelos até ombros ficarem ligeiramente abaixo dos cotovelos',
+      'Empurra de volta até quase trancar os braços',
+      'Tronco ligeiramente inclinado à frente = mais peito; vertical = mais tríceps'
+    ],
+    tips: 'Se ainda não consegues fazer com peso corporal, usa máquina assistida ou banda elástica.',
+    mistakes: 'Descer demasiado (lesão no ombro). Balançar o corpo. Tranquar bruscamente os cotovelos.'
+  },
+  lat_pulldown_wide: {
+    name: 'Lat pulldown com pega larga',
+    muscles: { primary: ['Grande dorsal'], secondary: ['Bíceps', 'Romboides'] },
+    execution: [
+      'Senta-te com pernas presas debaixo dos rolos',
+      'Pega na barra mais larga que os ombros, palmas para a frente',
+      'Inclina o tronco ~10-15° para trás',
+      'Puxa a barra para a parte superior do peito, juntando as omoplatas',
+      'Regresso controlado, deixando o lat esticar completamente em cima'
+    ],
+    tips: 'Pensa em "puxar com os cotovelos", não com as mãos. Os antebraços são apenas ganchos.',
+    mistakes: 'Puxar atrás da cabeça (mau para os ombros). Usar balanço. Não esticar completamente no topo.'
+  },
+  lat_pulldown_neutral: {
+    name: 'Lat pulldown com pega neutra',
+    muscles: { primary: ['Grande dorsal'], secondary: ['Bíceps', 'Romboides'] },
+    execution: [
+      'Usa a barra de pega neutra (palmas viradas uma para a outra)',
+      'Senta-te com pernas presas',
+      'Puxa a barra até ao peito superior',
+      'Foco em juntar as omoplatas no fim'
+    ],
+    tips: 'Pega neutra coloca menos stress no ombro e activa mais a parte inferior do dorsal — bom para espessura.',
+    mistakes: 'Puxar com bíceps em vez de costas. Tronco demasiado inclinado.'
+  },
+  pullup_negative: {
+    name: 'Negativas de pull-up (assistidas)',
+    muscles: { primary: ['Grande dorsal'], secondary: ['Bíceps', 'Romboides', 'Core'] },
+    execution: [
+      'Sobe ao topo da barra usando cadeira/salto/banda elástica',
+      'Queixo acima da barra, posição activa',
+      'Desce o mais lento possível — alvo: 5+ segundos',
+      'No fim, repete subindo com ajuda outra vez'
+    ],
+    tips: 'Negativas são a melhor forma de construir força para a primeira pull-up real. Foco na descida lenta.',
+    mistakes: 'Descer rápido (perdes o estímulo). Não chegar ao topo antes de começar. Saltar etapas.'
+  },
+  seated_row_neutral: {
+    name: 'Seated row com pega neutra',
+    muscles: { primary: ['Grande dorsal', 'Romboides'], secondary: ['Bíceps', 'Deltoide posterior'] },
+    execution: [
+      'Senta-te no aparelho com pés apoiados',
+      'Pega com palmas uma para a outra',
+      'Puxa as pegas para a barriga, juntando as omoplatas',
+      'Tronco quase vertical, sem balanço',
+      'Regresso controlado deixando os ombros chegarem à frente'
+    ],
+    tips: 'No final do puxar, "espreme" as omoplatas durante 1 segundo. Esse é o ponto onde mais músculo trabalhas.',
+    mistakes: 'Usar o tronco para puxar (balançar). Pegar demasiado curto. Não juntar omoplatas.'
+  },
+  barbell_row: {
+    name: 'Remada curvada com barra',
+    muscles: { primary: ['Grande dorsal', 'Romboides', 'Trapézio médio'], secondary: ['Bíceps', 'Lombar'] },
+    execution: [
+      'Pés à largura dos ombros, joelhos ligeiramente flectidos',
+      'Inclinação do tronco ~45° (não horizontal — preserva lombar)',
+      'Pega na barra ligeiramente mais larga que os ombros, pega supinada ou pronada',
+      'Puxa a barra ao baixo ventre / umbigo',
+      'Regresso controlado, mantendo a posição do tronco'
+    ],
+    tips: 'Exercício mais técnico do que parece — começa com peso conservador. A lombar deve estar neutra (não arqueada nem arredondada).',
+    mistakes: 'Inclinar demasiado o tronco. Puxar com balanço. Lombar arredondada.'
+  },
+  one_arm_db_row: {
+    name: 'Remada com halter, um braço',
+    muscles: { primary: ['Grande dorsal', 'Romboides'], secondary: ['Bíceps', 'Trapézio'] },
+    execution: [
+      'Joelho e mão num banco plano, outra perna no chão',
+      'Halter na mão livre, braço esticado',
+      'Puxa o halter para a cintura/anca, cotovelo passa próximo do tronco',
+      'No topo, "espreme" a omoplata para a coluna',
+      'Desce controlado em 2-3 segundos'
+    ],
+    tips: 'Trabalha cada lado independentemente — útil para corrigir desequilíbrios.',
+    mistakes: 'Rotação do tronco (uso de momento). Puxar com o bíceps. Cotovelo aberto demais.'
+  },
+  cable_pullover: {
+    name: 'Pullover na poleia',
+    muscles: { primary: ['Grande dorsal'], secondary: ['Peitoral', 'Tríceps cabeça longa'] },
+    execution: [
+      'Polia ajustada para cima, pega na barra ou corda',
+      'De pé, ligeiramente inclinado à frente',
+      'Braços quase esticados (flexão leve no cotovelo, fixos)',
+      'Puxa a barra para baixo até às coxas usando os lats',
+      'Regresso lento, sentindo o lat esticar'
+    ],
+    tips: 'Excelente para isolar o lat sem envolver muito o bíceps. Sente o lat a "puxar" o peso, não o braço.',
+    mistakes: 'Flectir cotovelos durante o movimento (transforma-se em pushdown). Usar tronco.'
+  },
+  face_pull: {
+    name: 'Face pulls na poleia',
+    muscles: { primary: ['Deltoide posterior', 'Romboides', 'Trapézio médio'], secondary: [] },
+    execution: [
+      'Polia ajustada à altura do rosto (ou ligeiramente acima)',
+      'Pega na corda com palmas para baixo',
+      'Puxa a corda em direcção ao rosto, separando as pontas',
+      'Cotovelos altos (acima dos ombros) no fim do movimento',
+      'Pausa curta no fim, regresso controlado'
+    ],
+    tips: 'Um dos melhores exercícios para postura e saúde do ombro. Faz 4 séries semanais sem falhar.',
+    mistakes: 'Puxar para o peito em vez do rosto. Cotovelos baixos. Peso excessivo (perde técnica).'
+  },
+  ez_curl: {
+    name: 'Rosca direta com barra EZ',
+    muscles: { primary: ['Bíceps'], secondary: ['Braquial', 'Antebraço'] },
+    execution: [
+      'De pé, pega na barra EZ com palmas para cima',
+      'Cotovelos colados ao tronco, fixos',
+      'Flecte os antebraços levantando a barra até ao peito',
+      'No topo, "espreme" o bíceps 1 segundo',
+      'Desce controlado'
+    ],
+    tips: 'A barra EZ é mais amigável para pulsos que a barra reta. Pega no ângulo natural dos punhos.',
+    mistakes: 'Balançar o tronco. Mover os cotovelos para a frente. Não esticar completamente em baixo.'
+  },
+  hammer_curl: {
+    name: 'Rosca martelo com halteres',
+    muscles: { primary: ['Bíceps', 'Braquial'], secondary: ['Antebraço'] },
+    execution: [
+      'De pé, halteres ao lado, palmas viradas uma para a outra',
+      'Cotovelos colados ao tronco',
+      'Levanta os halteres mantendo as palmas a apontar uma à outra',
+      'Sobe até o haltere quase tocar o ombro',
+      'Desce controlado'
+    ],
+    tips: 'Trabalha mais o braquial (músculo por baixo do bíceps) — dá mais espessura ao braço.',
+    mistakes: 'Rotação dos halteres no topo. Balanço. Cotovelos a moverem-se à frente.'
+  },
+  concentration_curl: {
+    name: 'Rosca concentrada com halter',
+    muscles: { primary: ['Bíceps'], secondary: [] },
+    execution: [
+      'Sentado num banco, joelhos abertos',
+      'Cotovelo apoiado no interior da coxa',
+      'Haltere na mão, braço esticado',
+      'Levanta o haltere flectindo o cotovelo, até quase tocar o ombro',
+      'Apertar o bíceps no topo, descer lento'
+    ],
+    tips: 'Excelente para o pico do bíceps. A posição obriga ao isolamento total.',
+    mistakes: 'Usar o tronco. Não estender completamente. Peso excessivo (não dá para isolar).'
+  },
+  hack_squat: {
+    name: 'Hack squat',
+    muscles: { primary: ['Quadríceps', 'Glúteos'], secondary: ['Femurais'] },
+    execution: [
+      'Posiciona-te na máquina, ombros sob as almofadas',
+      'Pés à largura dos ombros, ligeiramente à frente do corpo',
+      'Desce flectindo joelhos até as coxas estarem paralelas ao chão (ou abaixo)',
+      'Empurra de volta sem trancar joelhos no topo',
+      'Mantém a lombar pressionada no encosto sempre'
+    ],
+    tips: 'Substituto seguro do agachamento livre para quem é principiante. Foca em descer até abaixo do paralelo — meia amplitude não funciona.',
+    mistakes: 'Joelhos a colapsarem para dentro. Levantar os calcanhares. Amplitude parcial.'
+  },
+  leg_press: {
+    name: 'Leg press',
+    muscles: { primary: ['Quadríceps', 'Glúteos'], secondary: ['Femurais'] },
+    execution: [
+      'Senta-te com costas e cabeça no encosto',
+      'Pés à largura dos ombros no meio da plataforma',
+      'Desce o peso flectindo joelhos até ~90° (ou ligeiramente menos)',
+      'Empurra de volta sem trancar joelhos',
+      'Mantém a lombar pressionada — não permitir que os glúteos saiam do banco'
+    ],
+    tips: 'Pés mais altos = mais glúteo/femoral. Pés mais baixos = mais quadríceps.',
+    mistakes: 'Trancar joelhos no topo. Glúteos a saírem do banco no fundo. Joelhos para dentro.'
+  },
+  leg_press_high_feet: {
+    name: 'Leg press com pés altos',
+    muscles: { primary: ['Glúteos', 'Femurais'], secondary: ['Quadríceps'] },
+    execution: [
+      'Pés colocados na parte superior da plataforma',
+      'Largura ligeiramente mais larga que os ombros',
+      'Desce até flexão de ~90° nos joelhos',
+      'Empurra através do calcanhar (sentir glúteo)',
+      'Não trancar joelhos no topo'
+    ],
+    tips: 'Variante para enfatizar glúteo e femoral em vez de quadríceps. Põe o foco mental nos glúteos.',
+    mistakes: 'Pés demasiado altos (perde-se controlo). Joelhos a colapsarem.'
+  },
+  leg_extension: {
+    name: 'Leg extension (cadeira extensora)',
+    muscles: { primary: ['Quadríceps'], secondary: [] },
+    execution: [
+      'Senta-te na máquina com costas no encosto',
+      'Ajusta para que o eixo da máquina fique alinhado com o joelho',
+      'Rolos das almofadas no topo dos pés',
+      'Estende as pernas até quase travar os joelhos',
+      'Pausa de 1 segundo em cima, desce em 2-3 segundos'
+    ],
+    tips: 'Isolamento puro do quadríceps. Foca na contracção em cima.',
+    mistakes: 'Usar momento (balançar tronco). Não esticar completamente. Movimento demasiado rápido.'
+  },
+  rdl_db: {
+    name: 'RDL com halteres (peso morto romeno)',
+    muscles: { primary: ['Femurais', 'Glúteos'], secondary: ['Lombar', 'Trapézio'] },
+    execution: [
+      'De pé, halteres à frente das coxas, joelhos com leve flexão',
+      'Articula a anca para trás (não os joelhos)',
+      'Desce os halteres ao longo das pernas até sentir esticar os femurais',
+      'Costas neutras, peito para a frente',
+      'Empurra a anca para a frente para regressar'
+    ],
+    tips: 'A chave é a articulação da anca, não a flexão dos joelhos. Sente os femurais a esticar — esse é o sinal de boa execução.',
+    mistakes: 'Curvar a lombar. Joelhos a flectirem demasiado (vira-se em agachamento). Halteres longe das pernas.'
+  },
+  rdl_bar: {
+    name: 'RDL com barra',
+    muscles: { primary: ['Femurais', 'Glúteos'], secondary: ['Lombar', 'Trapézio'] },
+    execution: [
+      'Barra agarrada com pega à largura dos ombros, palmas para o corpo',
+      'Joelhos com leve flexão constante',
+      'Articula a anca para trás, descendo a barra perto das pernas',
+      'Desce até sentir alongamento nos femurais (geralmente meio da canela)',
+      'Empurra a anca para a frente para subir, contraindo glúteo no topo'
+    ],
+    tips: 'Manter a barra colada às pernas todo o movimento. Costas neutras sempre.',
+    mistakes: 'Lombar arredondada. Barra longe do corpo. Hiperextensão da lombar no topo.'
+  },
+  leg_curl: {
+    name: 'Leg curl',
+    muscles: { primary: ['Femurais'], secondary: ['Gémeos'] },
+    execution: [
+      'Deitado de barriga para baixo (versão deitada) ou sentado na máquina',
+      'Almofadas atrás dos tornozelos / em cima da canela',
+      'Flecte os joelhos puxando os calcanhares em direcção aos glúteos',
+      'Pausa breve no topo',
+      'Desce controlado'
+    ],
+    tips: 'Aponta os dedos dos pés ligeiramente para baixo para focar mais no femural.',
+    mistakes: 'Levantar os glúteos do banco. Movimento parcial. Usar momento.'
+  },
+  hip_thrust: {
+    name: 'Hip thrust na máquina',
+    muscles: { primary: ['Glúteos'], secondary: ['Femurais', 'Quadríceps'] },
+    execution: [
+      'Senta-te com costas apoiadas na máquina',
+      'Almofada na zona da anca (em cima do osso púbico)',
+      'Pés assentes plenamente no chão, à largura dos ombros',
+      'Empurra a anca para cima até criar uma linha reta dos joelhos aos ombros',
+      'Contracção forte do glúteo no topo',
+      'Desce controlado, sem deixar a anca cair'
+    ],
+    tips: 'O exercício rei para glúteos. Concentra-te em "esmagar" o glúteo em cima durante 1 segundo.',
+    mistakes: 'Subir demais (hiperextensão da lombar). Não chegar à posição neutra em cima. Joelhos para dentro.'
+  },
+  hip_abductor: {
+    name: 'Cadeira abdutora',
+    muscles: { primary: ['Glúteo médio', 'Glúteo menor'], secondary: [] },
+    execution: [
+      'Senta-te na máquina com costas no encosto',
+      'Almofadas no lado externo dos joelhos',
+      'Empurra os joelhos para fora contra a resistência',
+      'Pausa breve no fim do movimento',
+      'Regresso controlado'
+    ],
+    tips: 'Excelente para a parte lateral do glúteo, que dá largura à anca e ajuda na cintura "em V".',
+    mistakes: 'Inclinar o tronco para gerar momento. Movimento demasiado rápido. Amplitude parcial.'
+  },
+  calf_leg_press: {
+    name: 'Gémeos no leg press',
+    muscles: { primary: ['Gémeos'], secondary: ['Solear'] },
+    execution: [
+      'Posição normal de leg press',
+      'Pés apoiados na metade inferior da plataforma — só a parte da frente do pé',
+      'Estende os tornozelos ao máximo (ponta dos pés)',
+      'Desce controlado deixando o calcanhar cair (alongamento máximo)',
+      'Volta a estender'
+    ],
+    tips: 'Amplitude total é crítica — desce até sentir esticar. Trabalha sempre nos 12-15 reps com pausa em baixo.',
+    mistakes: 'Amplitude parcial. Usar momento. Calcanhar demasiado próximo da plataforma.'
+  },
+  standing_calf_db: {
+    name: 'Gémeos em pé com halteres',
+    muscles: { primary: ['Gémeos'], secondary: ['Solear'] },
+    execution: [
+      'De pé numa elevação (anilha ou plataforma), pontas dos pés na elevação',
+      'Halteres ao lado do corpo',
+      'Desce os calcanhares ao máximo (alongamento)',
+      'Sobe nas pontas dos pés ao máximo',
+      'Pausa breve no topo, controla a descida'
+    ],
+    tips: 'Trabalha 1 perna de cada vez se precisares de progredir além dos halteres disponíveis.',
+    mistakes: 'Pés todos na elevação (em vez só das pontas). Movimento curto. Velocidade excessiva.'
+  },
+  cable_crossover: {
+    name: 'Crossover na poleia (alto p/ baixo)',
+    muscles: { primary: ['Peitoral inferior'], secondary: ['Deltoide anterior'] },
+    execution: [
+      'Polias em cima, uma pega em cada mão',
+      'Um passo à frente, tronco ligeiramente inclinado',
+      'Braços abertos formando um arco, leve flexão dos cotovelos (fixa)',
+      'Junta as pegas à frente, abaixo do peito, cruzando ligeiramente',
+      'Pausa, regresso controlado deixando o peito esticar'
+    ],
+    tips: 'O ângulo de cima para baixo trabalha o peito inferior. Sente o peito a "puxar" o peso — não os braços.',
+    mistakes: 'Flectir os cotovelos durante o movimento. Tronco demasiado inclinado. Amplitude parcial.'
+  },
+  pec_deck: {
+    name: 'Peck deck (máquina de peitoral)',
+    muscles: { primary: ['Peitoral'], secondary: ['Deltoide anterior'] },
+    execution: [
+      'Ajusta o assento para que os antebraços fiquem ao nível do meio do peito',
+      'Antebraços apoiados nas almofadas, cotovelos a 90°',
+      'Junta as almofadas à frente do peito',
+      'Pausa de 1 segundo, contraindo o peito',
+      'Regresso controlado deixando o peito esticar'
+    ],
+    tips: 'Isolamento puro do peito sem envolvimento de tríceps. Ideal para finalizar o treino.',
+    mistakes: 'Encolher os ombros para a frente. Não contrair no topo. Não controlar a fase excêntrica.'
+  },
+  incline_treadmill: {
+    name: 'Cardio inclinado na passadeira',
+    muscles: { primary: ['Glúteos', 'Femurais', 'Sistema cardiovascular'], secondary: [] },
+    execution: [
+      'Inclina a passadeira para 10-12%',
+      'Velocidade entre 5-5.5 km/h (caminhada rápida)',
+      'NÃO te apoies nas barras laterais',
+      'Mantém os ombros para trás e o core activo',
+      'Respira pelo nariz se possível'
+    ],
+    tips: 'Queima calorias semelhante a corrida sem impacto nas articulações. Trabalha glúteo durante o cardio.',
+    mistakes: 'Agarrar as barras (anula o exercício). Inclinação baixa (perde a intensidade). Velocidade demasiado alta.'
+  },
+  stairmaster: {
+    name: 'Stairmaster (máquina de escadas)',
+    muscles: { primary: ['Quadríceps', 'Glúteos', 'Gémeos'], secondary: ['Sistema cardiovascular'] },
+    execution: [
+      'Nível 6-7 para começar',
+      'Postura erecta, sem apoiar peso nas barras',
+      'Pé totalmente apoiado em cada degrau',
+      'Respiração controlada'
+    ],
+    tips: 'Brutal para queima calórica e trabalho de glúteo. Excelente após pernas para acabar o trabalho.',
+    mistakes: 'Apoiar-se nas barras (perde 50% do trabalho). Pisar só com as pontas. Inclinar o tronco à frente.'
+  },
+  plank: {
+    name: 'Prancha estática',
+    muscles: { primary: ['Core (transverso, recto abdominal)'], secondary: ['Glúteos', 'Ombros'] },
+    execution: [
+      'Posição de flexão mas apoiado nos antebraços',
+      'Corpo formando uma linha recta dos calcanhares à cabeça',
+      'Core contraído, glúteo contraído',
+      'Olhar para baixo (pescoço neutro)',
+      'Aguenta 45-60 segundos sem perder a linha'
+    ],
+    tips: 'Se conseguires aguentar mais de 1 minuto facilmente, sobe a dificuldade (prancha com pés em bola, ou pesos nas costas).',
+    mistakes: 'Anca a cair (lombar a curvar). Anca demasiado alta (tira tensão). Olhar para a frente.'
+  },
+  hanging_leg_raise: {
+    name: 'Hanging leg raise (barra)',
+    muscles: { primary: ['Recto abdominal inferior'], secondary: ['Flexores da anca', 'Antebraços'] },
+    execution: [
+      'Pendurado na barra, pega à largura dos ombros',
+      'Pernas estendidas para baixo',
+      'Levanta as pernas até estarem paralelas ao chão (ou mais alto)',
+      'Desce controlado, sem balançar',
+      'Mantém o core contraído'
+    ],
+    tips: 'Versão mais fácil: dobrar joelhos. Versão mais difícil: pernas direitas até à barra.',
+    mistakes: 'Balanço para gerar momento. Descer rápido. Encolher os ombros.'
+  },
+  cable_crunch: {
+    name: 'Cable crunch (abdominal na poleia)',
+    muscles: { primary: ['Recto abdominal'], secondary: [] },
+    execution: [
+      'Ajoelhado à frente da polia alta, corda atrás da cabeça',
+      'Mãos a segurar a corda perto da cabeça (não puxar para baixo com os braços)',
+      'Flecte a coluna trazendo os cotovelos para os joelhos',
+      'Contracção forte do abdominal em baixo',
+      'Regresso controlado'
+    ],
+    tips: 'O movimento é da coluna, não dos braços. Imagina que estás a tentar fazer uma "bola" com o tronco.',
+    mistakes: 'Puxar com os braços (a corda não desce — só o tronco se move). Pouco ângulo. Lombar a curvar.'
+  },
+  russian_twist: {
+    name: 'Russian twists com peso',
+    muscles: { primary: ['Oblíquos'], secondary: ['Recto abdominal'] },
+    execution: [
+      'Sentado no chão, joelhos flectidos, calcanhares no chão (ou pés elevados para harder)',
+      'Tronco inclinado a ~45°',
+      'Peso (halter, anilha, kettlebell) seguro com as duas mãos',
+      'Roda o tronco para um lado tocando o peso no chão',
+      'Roda para o outro lado'
+    ],
+    tips: 'O movimento é dos oblíquos, não dos braços. Roda mesmo o tronco.',
+    mistakes: 'Mover só os braços. Postura demasiado erecta. Calcanhares a saltarem.'
+  },
+  mobility: {
+    name: 'Alongamento + foam roller',
+    muscles: { primary: ['Mobilidade geral'], secondary: [] },
+    execution: [
+      'Foam roller no quadríceps (1 min cada lado)',
+      'Foam roller nos femurais e glúteos',
+      'Foam roller nas costas',
+      'Alongamento do peito na parede (1 min cada lado)',
+      'Alongamento dos lats em barra',
+      'Cat-cow para mobilidade da coluna (10 reps)'
+    ],
+    tips: 'O foam rolling é "doloroso bom" — passa devagar nos pontos mais sensíveis.',
+    mistakes: 'Passar demasiado rápido. Saltar zonas que doem (são as que mais precisam).'
+  }
+};
+
+
+
+function renderDay(dayIdx) {
+  const day = DAYS[dayIdx];
+  const container = document.getElementById('daysContainer');
+  container.innerHTML = '';
+
+  const card = document.createElement('div');
+  card.className = 'day-card visible';
+
+  const header = document.createElement('div');
+  header.className = 'day-header';
+  header.innerHTML = `
+    <div>
+      <div class="day-name">${day.name}</div>
+      <div class="day-totals">
+        <span><strong>${day.totals.kcal}</strong> kcal</span>
+        <span><strong>${day.totals.prot}</strong>g proteína</span>
+        <span><strong>${day.totals.carbs}</strong>g hidratos</span>
+        <span><strong>${day.totals.fat}</strong>g gordura</span>
+      </div>
+    </div>
+    <span class="day-tag ${day.tagClass}">${day.tag}</span>
+  `;
+  card.appendChild(header);
+
+  const timeline = document.createElement('div');
+  timeline.className = 'timeline';
+
+  day.timeline.forEach(item => {
+    const timeDiv = document.createElement('div');
+    timeDiv.className = 'timeline-time timeline-item';
+    timeDiv.dataset.cat = item.cat;
+    timeDiv.textContent = item.time;
+
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'timeline-content timeline-item';
+    contentDiv.dataset.cat = item.cat;
+
+    let blockHTML = `<div class="block b-${item.type}">`;
+    blockHTML += `<div class="block-title">${item.title}</div>`;
+    if (item.detail) blockHTML += `<div class="block-detail">${item.detail}</div>`;
+    if (item.items) blockHTML += `<div class="meal-items">${item.items}</div>`;
+    if (item.macros) {
+      blockHTML += `<div class="block-macros"><strong>${item.macros.kcal} kcal</strong> · ${item.macros.p}P · ${item.macros.c}HC · ${item.macros.f}G</div>`;
+    }
+    if (item.exercises) {
+      blockHTML += '<div class="exercises">';
+      item.exercises.forEach(ex => {
+        blockHTML += `<div class="exercise" data-exercise="${ex.key}" data-sets="${ex.sets}">
+          <span class="exercise-name">${ex.name}</span>
+          <span class="exercise-sets">${ex.sets}</span>
+        </div>`;
+      });
+      blockHTML += '</div>';
+    }
+    blockHTML += '</div>';
+
+    contentDiv.innerHTML = blockHTML;
+    timeline.appendChild(timeDiv);
+    timeline.appendChild(contentDiv);
+  });
+
+  card.appendChild(timeline);
+  container.appendChild(card);
+
+  card.querySelectorAll('.exercise').forEach(el => {
+    el.addEventListener('click', () => {
+      openExerciseModal(el.dataset.exercise, el.dataset.sets);
+    });
+  });
+
+  applyFilter(currentFilter);
+}
+
+function openExerciseModal(key, sets) {
+  const ex = EXERCISES[key];
+  if (!ex) return;
+  document.getElementById('modalTitle').textContent = ex.name;
+  document.getElementById('modalSubtitle').textContent = sets;
+  const searchQuery = encodeURIComponent(ex.name + ' how to');
+  const videoUrl = `https://www.youtube.com/results?search_query=${searchQuery}`;
+  let content = '';
+  content += '<div class="modal-section"><h4>Músculos trabalhados</h4><div class="modal-muscles">';
+  ex.muscles.primary.forEach(m => { content += `<span class="muscle-tag">${m}</span>`; });
+  ex.muscles.secondary.forEach(m => { content += `<span class="muscle-tag secondary">${m}</span>`; });
+  content += '</div></div>';
+  content += '<div class="modal-section"><h4>Execução correcta</h4><ol>';
+  ex.execution.forEach(step => { content += `<li>${step}</li>`; });
+  content += '</ol></div>';
+  if (ex.tips) {
+    content += '<div class="modal-section"><h4>Dica chave</h4>';
+    content += `<div class="tip-box"><strong>💡</strong> ${ex.tips}</div></div>`;
+  }
+  if (ex.mistakes) {
+    content += '<div class="modal-section"><h4>Erros comuns a evitar</h4>';
+    content += `<p>${ex.mistakes}</p></div>`;
+  }
+  content += '<div class="modal-section">';
+  content += `<a href="${videoUrl}" target="_blank" rel="noopener" class="video-link">Ver demonstrações no YouTube</a>`;
+  content += '</div>';
+  document.getElementById('modalContent').innerHTML = content;
+  document.getElementById('modalOverlay').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target.id === 'modalOverlay') closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+let currentFilter = 'training';
+let currentDay = new Date().getDay();
+
+function applyFilter(filter) {
+  currentFilter = filter;
+  const items = document.querySelectorAll('.timeline-item');
+  items.forEach(item => {
+    const cat = item.dataset.cat;
+    let show = false;
+    if (filter === 'all') show = true;
+    else if (filter === 'training' && (cat === 'training' || cat === 'all')) show = true;
+    else if (filter === 'meals' && (cat === 'meals' || cat === 'all')) show = true;
+    item.style.display = show ? '' : 'none';
+  });
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilter(btn.dataset.filter);
+  });
+});
+
+function setActiveDay(dayIdx) {
+  currentDay = dayIdx;
+  document.querySelectorAll('.day-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.day) === dayIdx);
+  });
+  renderDay(dayIdx);
+}
+
+document.querySelectorAll('.day-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    setActiveDay(parseInt(btn.dataset.day));
+  });
+});
+
+setActiveDay(new Date().getDay());
+</script>
 </body>
 </html>
